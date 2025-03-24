@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300">
+  <!-- Wifi Symbol -->
+  <path fill="#FF4B36" d="M400 50 C 350 100, 450 100, 400 50 M400 80 C 370 110, 430 110, 400 80"/>
+  
+  <!-- U Shape -->
+  <path fill="#FF6634" d="M100 100 L100 200 C100 250,200 250,200 200 L200 100 L100 100"/>
+  
+  <!-- Number 1 -->
+  <rect x="130" y="120" width="40" height="60" fill="black"/>
+  
+  <!-- Text -->
+  <text x="250" y="200" font-family="Arial" font-size="100" font-weight="bold">Utilities</text>
+  <text x="250" y="250" font-family="Arial" font-size="80" fill="#FF4B36">One</text>
+  <text x="250" y="290" font-family="Arial" font-size="40">WIRELESS</text>
+</svg>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Utilities One Wireless - Infrastructure Construction</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="logo.svg" alt="Utilities One Wireless Logo" class="logo">
+            <div class="title-container">
+                <h1>Infrastructure Construction</h1>
+                <div class="subtitle">Tower Construction & Equipment Management</div>
+            </div>
+        </div>
+        <div class="map-container">
+            <div id="usa-map"></div>
+            <div class="legend">
+                <h3>Construction Regions</h3>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: var(--secondary);"></div>
+                    <span>Active Construction</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #e3f2fd;"></div>
+                    <span>Future Sites</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: var(--primary);"></div>
+                    <span>Selected Region</span>
+                </div>
+            </div>
+            <div class="metrics-summary">
+                <div class="metric">
+                    <span class="metric-label">Total Active Sites</span>
+                    <span class="metric-value" id="total-sites">--</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Equipment Health</span>
+                    <span class="metric-value" id="equipment-health">--</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Construction Teams</span>
+                    <span class="metric-value" id="total-teams">--</span>
+                </div>
+            </div>
+            <div id="region-details" class="hidden">
+                <h2 id="region-title"></h2>
+                <div class="operations-grid" id="operations-content"></div>
+                <button onclick="closeDetails()" class="close-btn">Close</button>
+            </div>
+        </div>
+    </div>
+    <div id="tooltip" class="tooltip hidden"></div>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
