@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Region Dashboard | Admin</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="admin-styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Navigation -->
+        <nav class="admin-nav">
+            <div class="nav-brand">
+                <h1>Admin Dashboard</h1>
+            </div>
+            <div class="nav-links">
+                <a href="../index.html">Map Overview</a>
+                <a href="#" class="active">Region Dashboard</a>
+                <a href="financial-reports.html">Financial Reports</a>
+                <a href="project-management.html">Project Management</a>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="admin-content">
+            <div class="region-header">
+                <h2 id="regionTitle">Region Overview</h2>
+                <div class="region-selector">
+                    <label for="regionSelect">Select Region:</label>
+                    <select id="regionSelect">
+                        <option value="pnw">Pacific Northwest</option>
+                        <option value="midwest">Midwest</option>
+                        <option value="northeast">Northeast</option>
+                        <option value="southeast">Southeast</option>
+                        <option value="southwest">Southwest</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Dashboard Grid -->
+            <div class="dashboard-grid">
+                <!-- Key Metrics -->
+                <div class="dashboard-card">
+                    <h3>Key Metrics</h3>
+                    <div class="metrics-grid">
+                        <div class="metric">
+                            <span class="metric-value" id="totalProjects">0</span>
+                            <span class="metric-label">Total Projects</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-value" id="activeProjects">0</span>
+                            <span class="metric-label">Active Projects</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-value" id="completedProjects">0</span>
+                            <span class="metric-label">Completed</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-value" id="projectBudget">$0M</span>
+                            <span class="metric-label">Total Budget</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Status Chart -->
+                <div class="dashboard-card">
+                    <h3>Project Status Distribution</h3>
+                    <canvas id="statusChart"></canvas>
+                </div>
+
+                <!-- Financial Overview -->
+                <div class="dashboard-card">
+                    <h3>Financial Overview</h3>
+                    <canvas id="financialChart"></canvas>
+                </div>
+
+                <!-- Timeline -->
+                <div class="dashboard-card">
+                    <h3>Project Timeline</h3>
+                    <div class="timeline" id="projectTimeline"></div>
+                </div>
+            </div>
+
+            <!-- Project List -->
+            <div class="dashboard-card full-width">
+                <h3>Active Projects</h3>
+                <div class="project-list" id="projectList">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Project Name</th>
+                                <th>Status</th>
+                                <th>Budget</th>
+                                <th>Progress</th>
+                                <th>Due Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="projectTableBody">
+                            <!-- Projects will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../app.js"></script>
+    <script src="region-dashboard.js"></script>
+</body>
+</html>

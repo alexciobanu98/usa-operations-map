@@ -124,7 +124,13 @@
                             <option value="">All Regions</option>
                             <option value="pnw">Pacific Northwest</option>
                             <option value="midwest">Midwest</option>
+                            <option value="northeast">Northeast</option>
+                            <option value="southeast">Southeast</option>
+                            <option value="southwest">Southwest</option>
                         </select>
+                        <button class="add-site-button" id="addSiteButton">
+                            <i class="fas fa-plus"></i> Add New Site
+                        </button>
                     </div>
                 </div>
 
@@ -317,6 +323,336 @@
                             <button class="secondary-button" onclick="closeProjectDetail()">Close</button>
                             <button class="primary-button" onclick="editProject()">Edit Project</button>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add New Site Modal -->
+            <div id="addSiteModal" class="modal hidden">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>Add New Project Site</h2>
+                        <button class="close-button" id="closeSiteModal">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Form Customization Section -->
+                        <div class="form-customization">
+                            <h3>Customize Form Fields</h3>
+                            <p class="form-helper">Select which fields to include in your project site form:</p>
+                            
+                            <div class="field-toggles">
+                                <div class="field-toggle">
+                                    <input type="checkbox" id="field-customer" checked disabled>
+                                    <label for="field-customer">Customer (Required)</label>
+                                </div>
+                                <div class="field-toggle">
+                                    <input type="checkbox" id="field-site-name" checked disabled>
+                                    <label for="field-site-name">Site Name (Required)</label>
+                                </div>
+                                <div class="field-toggle">
+                                    <input type="checkbox" id="field-region" checked disabled>
+                                    <label for="field-region">Region (Required)</label>
+                                </div>
+                                <div class="field-toggle">
+                                    <input type="checkbox" id="field-status" checked disabled>
+                                    <label for="field-status">Status (Required)</label>
+                                </div>
+                                <div class="field-toggle">
+                                    <input type="checkbox" id="field-dates" checked>
+                                    <label for="field-dates">Start/End Dates</label>
+                                </div>
+                                <div class="field-toggle">
+                                    <input type="checkbox" id="field-budget" checked>
+                                    <label for="field-budget">Budget Information</label>
+                                </div>
+                                <div class="field-toggle">
+                                    <input type="checkbox" id="field-equipment" checked>
+                                    <label for="field-equipment">Equipment Requirements</label>
+                                </div>
+                                <div class="field-toggle">
+                                    <input type="checkbox" id="field-team" checked>
+                                    <label for="field-team">Team Assignment</label>
+                                </div>
+                                <div class="field-toggle">
+                                    <input type="checkbox" id="field-location" checked>
+                                    <label for="field-location">Location Details</label>
+                                </div>
+                                <div class="field-toggle">
+                                    <input type="checkbox" id="field-milestones">
+                                    <label for="field-milestones">Milestones</label>
+                                </div>
+                                <div class="field-toggle">
+                                    <input type="checkbox" id="field-documents">
+                                    <label for="field-documents">Document Attachments</label>
+                                </div>
+                                <div class="field-toggle">
+                                    <input type="checkbox" id="field-notes">
+                                    <label for="field-notes">Additional Notes</label>
+                                </div>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button class="secondary-button" id="resetFormFields">Reset to Default</button>
+                                <button class="primary-button" id="applyFormFields">Apply Selection</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Project Site Form -->
+                        <form id="newSiteForm">
+                            <!-- Required Fields Section -->
+                            <div class="form-section">
+                                <h3>Required Information</h3>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="site-id">Site ID</label>
+                                        <input type="text" id="site-id" name="site-id" required placeholder="Auto-generated" disabled>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="project-number">Project Number</label>
+                                        <input type="text" id="project-number" name="project-number" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="site-name">Site Name</label>
+                                        <input type="text" id="site-name" name="site-name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="customer">Customer</label>
+                                        <select id="customer" name="customer" required>
+                                            <option value="">Select Customer</option>
+                                            <option value="verizon">Verizon</option>
+                                            <option value="att">AT&T</option>
+                                            <option value="tmobile">T-Mobile</option>
+                                            <option value="sprint">Sprint</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="region">Region</label>
+                                        <select id="region" name="region" required>
+                                            <option value="">Select Region</option>
+                                            <option value="pnw">Pacific Northwest</option>
+                                            <option value="midwest">Midwest</option>
+                                            <option value="northeast">Northeast</option>
+                                            <option value="southeast">Southeast</option>
+                                            <option value="southwest">Southwest</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="status">Status</label>
+                                        <select id="status" name="status" required>
+                                            <option value="">Select Status</option>
+                                            <option value="planning">Planning</option>
+                                            <option value="in-progress">In Progress</option>
+                                            <option value="on-hold">On Hold</option>
+                                            <option value="completed">Completed</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Optional Fields - Dates -->
+                            <div class="form-section" id="section-dates">
+                                <h3>Project Dates</h3>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="start-date">Start Date</label>
+                                        <input type="date" id="start-date" name="start-date">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="end-date">End Date</label>
+                                        <input type="date" id="end-date" name="end-date">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Optional Fields - Budget -->
+                            <div class="form-section" id="section-budget">
+                                <h3>Budget Information</h3>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="total-budget">Total Budget</label>
+                                        <div class="input-with-icon">
+                                            <i class="fas fa-dollar-sign"></i>
+                                            <input type="number" id="total-budget" name="total-budget" min="0" step="1000">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="budget-spent">Budget Spent</label>
+                                        <div class="input-with-icon">
+                                            <i class="fas fa-dollar-sign"></i>
+                                            <input type="number" id="budget-spent" name="budget-spent" min="0" step="1000">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Optional Fields - Equipment -->
+                            <div class="form-section" id="section-equipment">
+                                <h3>Equipment Requirements</h3>
+                                
+                                <div class="form-row">
+                                    <div class="form-group full-width">
+                                        <label>Required Equipment</label>
+                                        <div class="checkbox-group">
+                                            <div class="checkbox-item">
+                                                <input type="checkbox" id="eq-tower" name="equipment[]" value="tower">
+                                                <label for="eq-tower">Tower</label>
+                                            </div>
+                                            <div class="checkbox-item">
+                                                <input type="checkbox" id="eq-antenna" name="equipment[]" value="antenna">
+                                                <label for="eq-antenna">Antenna</label>
+                                            </div>
+                                            <div class="checkbox-item">
+                                                <input type="checkbox" id="eq-generator" name="equipment[]" value="generator">
+                                                <label for="eq-generator">Generator</label>
+                                            </div>
+                                            <div class="checkbox-item">
+                                                <input type="checkbox" id="eq-cables" name="equipment[]" value="cables">
+                                                <label for="eq-cables">Cables</label>
+                                            </div>
+                                            <div class="checkbox-item">
+                                                <input type="checkbox" id="eq-shelter" name="equipment[]" value="shelter">
+                                                <label for="eq-shelter">Shelter</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Optional Fields - Team -->
+                            <div class="form-section" id="section-team">
+                                <h3>Team Assignment</h3>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="project-manager">Project Manager</label>
+                                        <select id="project-manager" name="project-manager">
+                                            <option value="">Select Manager</option>
+                                            <option value="john-doe">John Doe</option>
+                                            <option value="jane-smith">Jane Smith</option>
+                                            <option value="mike-johnson">Mike Johnson</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="team-size">Team Size</label>
+                                        <input type="number" id="team-size" name="team-size" min="1" max="50">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Optional Fields - Location -->
+                            <div class="form-section" id="section-location">
+                                <h3>Location Details</h3>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="address">Address</label>
+                                        <input type="text" id="address" name="address">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="city">City</label>
+                                        <input type="text" id="city" name="city">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="state">State</label>
+                                        <input type="text" id="state" name="state">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="zip">ZIP Code</label>
+                                        <input type="text" id="zip" name="zip">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="latitude">Latitude</label>
+                                        <input type="text" id="latitude" name="latitude" placeholder="e.g. 47.6062">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="longitude">Longitude</label>
+                                        <input type="text" id="longitude" name="longitude" placeholder="e.g. -122.3321">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Optional Fields - Milestones -->
+                            <div class="form-section hidden" id="section-milestones">
+                                <h3>Project Milestones</h3>
+                                
+                                <div id="milestones-container">
+                                    <div class="milestone-item">
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label>Milestone Name</label>
+                                                <input type="text" name="milestone-name[]">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Target Date</label>
+                                                <input type="date" name="milestone-date[]">
+                                            </div>
+                                            <div class="form-group milestone-actions">
+                                                <button type="button" class="icon-button remove-milestone">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <button type="button" class="secondary-button" id="add-milestone">
+                                    <i class="fas fa-plus"></i> Add Milestone
+                                </button>
+                            </div>
+                            
+                            <!-- Optional Fields - Documents -->
+                            <div class="form-section hidden" id="section-documents">
+                                <h3>Document Attachments</h3>
+                                
+                                <div class="form-row">
+                                    <div class="form-group full-width">
+                                        <label for="document-upload">Upload Documents</label>
+                                        <div class="file-upload-container">
+                                            <input type="file" id="document-upload" name="documents[]" multiple>
+                                            <label for="document-upload" class="file-upload-label">
+                                                <i class="fas fa-cloud-upload-alt"></i>
+                                                <span>Drag files here or click to browse</span>
+                                            </label>
+                                        </div>
+                                        <div class="upload-preview" id="upload-preview"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Optional Fields - Notes -->
+                            <div class="form-section hidden" id="section-notes">
+                                <h3>Additional Notes</h3>
+                                
+                                <div class="form-row">
+                                    <div class="form-group full-width">
+                                        <label for="notes">Notes</label>
+                                        <textarea id="notes" name="notes" rows="4"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Form Submission -->
+                            <div class="form-actions">
+                                <button type="button" class="secondary-button" id="cancelSiteForm">Cancel</button>
+                                <button type="submit" class="primary-button">Create Project Site</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

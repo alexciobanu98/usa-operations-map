@@ -741,3 +741,302 @@ function editProject() {
     // Implementation for editing project
     console.log('Edit project clicked');
 }
+
+// Add Site Modal Functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // Modal elements
+    const addSiteButton = document.getElementById('addSiteButton');
+    const addSiteModal = document.getElementById('addSiteModal');
+    const closeSiteModal = document.getElementById('closeSiteModal');
+    const cancelSiteForm = document.getElementById('cancelSiteForm');
+    
+    // Form customization elements
+    const fieldToggles = document.querySelectorAll('.field-toggle input[type="checkbox"]');
+    const resetFormFields = document.getElementById('resetFormFields');
+    const applyFormFields = document.getElementById('applyFormFields');
+    
+    // Form elements
+    const newSiteForm = document.getElementById('newSiteForm');
+    const addMilestoneButton = document.getElementById('add-milestone');
+    const milestonesContainer = document.getElementById('milestones-container');
+    const documentUpload = document.getElementById('document-upload');
+    const uploadPreview = document.getElementById('upload-preview');
+    
+    // Open modal when clicking Add New Site button
+    if (addSiteButton) {
+        addSiteButton.addEventListener('click', function() {
+            addSiteModal.classList.add('active');
+        });
+    }
+    
+    // Close modal functions
+    function closeModal() {
+        addSiteModal.classList.remove('active');
+    }
+    
+    if (closeSiteModal) {
+        closeSiteModal.addEventListener('click', closeModal);
+    }
+    
+    if (cancelSiteForm) {
+        cancelSiteForm.addEventListener('click', closeModal);
+    }
+    
+    // Close modal when clicking outside
+    window.addEventListener('click', function(event) {
+        if (event.target === addSiteModal) {
+            closeModal();
+        }
+    });
+    
+    // Form field customization
+    if (applyFormFields) {
+        applyFormFields.addEventListener('click', function() {
+            fieldToggles.forEach(toggle => {
+                if (!toggle.disabled) {
+                    const fieldId = toggle.id;
+                    const sectionId = 'section-' + fieldId.replace('field-', '');
+                    const section = document.getElementById(sectionId);
+                    
+                    if (section) {
+                        if (toggle.checked) {
+                            section.classList.remove('hidden');
+                        } else {
+                            section.classList.add('hidden');
+                        }
+                    }
+                }
+            });
+        });
+    }
+    
+    // Reset form fields to default
+    if (resetFormFields) {
+        resetFormFields.addEventListener('click', function() {
+            fieldToggles.forEach(toggle => {
+                if (!toggle.disabled) {
+                    // Default state - dates, budget, equipment, team, location checked
+                    // milestones, documents, notes unchecked
+                    const fieldId = toggle.id;
+                    if (['field-dates', 'field-budget', 'field-equipment', 'field-team', 'field-location'].includes(fieldId)) {
+                        toggle.checked = true;
+                    } else {
+                        toggle.checked = false;
+                    }
+                }
+            });
+            
+            // Apply the changes
+            applyFormFields.click();
+        });
+    }
+    
+    // Add milestone functionality
+    if (addMilestoneButton && milestonesContainer) {
+        addMilestoneButton.addEventListener('click', function() {
+            const milestoneItem = document.createElement('div');
+            milestoneItem.className = 'milestone-item';
+            milestoneItem.innerHTML = `
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Milestone Name</label>
+                        <input type="text" name="milestone-name[]">
+                    </div>
+                    <div class="form-group">
+                        <label>Target Date</label>
+                        <input type="date" name="milestone-date[]">
+                    </div>
+                    <div class="form-group milestone-actions">
+                        <button type="button" class="icon-button remove-milestone">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            milestonesContainer.appendChild(milestoneItem);
+            
+            // Add event listener to remove button
+            const removeButton = milestoneItem.querySelector('.remove-milestone');
+            removeButton.addEventListener('click', function() {
+                milestonesContainer.removeChild(milestoneItem);
+            });
+        });
+    }
+    
+    // Handle file uploads
+    if (documentUpload && uploadPreview) {
+        documentUpload.addEventListener('change', function() {
+            uploadPreview.innerHTML = '';
+            
+            if (this.files.length > 0) {
+                for (let i = 0; i < this.files.length; i++) {
+                    const file = this.files[i];
+                    const filePreview = document.createElement('div');
+                    filePreview.className = 'file-preview';
+                    
+                    // Determine file type icon
+                    let fileIcon = 'fa-file';
+                    if (file.type.includes('image')) {
+                        fileIcon = 'fa-file-image';
+                    } else if (file.type.includes('pdf')) {
+                        fileIcon = 'fa-file-pdf';
+                    } else if (file.type.includes('word') || file.name.endsWith('.doc') || file.name.endsWith('.docx')) {
+                        fileIcon = 'fa-file-word';
+                    } else if (file.type.includes('excel') || file.name.endsWith('.xls') || file.name.endsWith('.xlsx')) {
+                        fileIcon = 'fa-file-excel';
+                    }
+                    
+                    filePreview.innerHTML = `
+                        <i class="fas ${fileIcon}"></i>
+                        <span>${file.name}</span>
+                        <small>${formatFileSize(file.size)}</small>
+                    `;
+                    
+                    uploadPreview.appendChild(filePreview);
+                }
+            }
+        });
+    }
+    
+    // Format file size
+    function formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+    
+    // Handle form submission
+    if (newSiteForm) {
+        newSiteForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            // Collect form data
+            const formData = new FormData(this);
+            const siteData = {};
+            
+            // Convert FormData to object
+            for (const [key, value] of formData.entries()) {
+                if (key.endsWith('[]')) {
+                    // Handle array fields
+                    const baseKey = key.slice(0, -2);
+                    if (!siteData[baseKey]) {
+                        siteData[baseKey] = [];
+                    }
+                    siteData[baseKey].push(value);
+                } else {
+                    siteData[key] = value;
+                }
+            }
+            
+            // Generate a unique site ID
+            const siteId = 'SITE-' + Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+            siteData['site-id'] = siteId;
+            
+            // In a real application, you would send this data to a server
+            console.log('New site data:', siteData);
+            
+            // Add the new site to the table
+            addSiteToTable(siteData);
+            
+            // Close the modal
+            closeModal();
+            
+            // Reset the form
+            newSiteForm.reset();
+        });
+    }
+    
+    // Add site to the table
+    function addSiteToTable(siteData) {
+        const tableBody = document.getElementById('projectTableBody');
+        if (!tableBody) return;
+        
+        // Create a new row
+        const row = document.createElement('tr');
+        
+        // Format dates
+        const startDate = siteData['start-date'] ? new Date(siteData['start-date']).toLocaleDateString() : 'N/A';
+        const endDate = siteData['end-date'] ? new Date(siteData['end-date']).toLocaleDateString() : 'N/A';
+        
+        // Get status class
+        let statusClass = '';
+        switch (siteData['status']) {
+            case 'planning':
+                statusClass = 'status-planning';
+                break;
+            case 'in-progress':
+                statusClass = 'status-in-progress';
+                break;
+            case 'on-hold':
+                statusClass = 'status-on-hold';
+                break;
+            case 'completed':
+                statusClass = 'status-completed';
+                break;
+            default:
+                statusClass = '';
+        }
+        
+        // Create row content
+        row.innerHTML = `
+            <td>${siteData['site-id']}</td>
+            <td>${siteData['project-number']}</td>
+            <td>${siteData['site-name']}</td>
+            <td><span class="status-badge ${statusClass}">${formatStatus(siteData['status'])}</span></td>
+            <td>${siteData['customer']}</td>
+            <td>${startDate}</td>
+            <td>${endDate}</td>
+            <td>
+                <button class="action-btn view-btn" data-id="${siteData['site-id']}">
+                    <i class="fas fa-eye"></i>
+                </button>
+                <button class="action-btn edit-btn" data-id="${siteData['site-id']}">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="action-btn delete-btn" data-id="${siteData['site-id']}">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </td>
+        `;
+        
+        // Add the row to the table
+        tableBody.prepend(row);
+        
+        // Add event listeners to buttons
+        const viewBtn = row.querySelector('.view-btn');
+        const editBtn = row.querySelector('.edit-btn');
+        const deleteBtn = row.querySelector('.delete-btn');
+        
+        viewBtn.addEventListener('click', function() {
+            // In a real application, you would fetch the site details
+            alert(`View site details for ${siteData['site-id']}`);
+        });
+        
+        editBtn.addEventListener('click', function() {
+            // In a real application, you would open the edit form
+            alert(`Edit site ${siteData['site-id']}`);
+        });
+        
+        deleteBtn.addEventListener('click', function() {
+            // Confirm before deleting
+            if (confirm(`Are you sure you want to delete site ${siteData['site-id']}?`)) {
+                tableBody.removeChild(row);
+            }
+        });
+    }
+    
+    // Format status for display
+    function formatStatus(status) {
+        if (!status) return 'Unknown';
+        
+        // Convert kebab-case to Title Case
+        return status.split('-').map(word => 
+            word.charAt(0).toUpperCase() + word.slice(1)
+        ).join(' ');
+    }
+});

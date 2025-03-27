@@ -14,7 +14,7 @@
             <div class="nav-left">
                 <div class="logo-title">
                     <img src="assets/logo.png" alt="Utilities One Logo" class="logo">
-                    <h1>Wireless Construction Management</h1>
+                    <h1>Wireless Construction <span class="title-highlight">Dashboard</span></h1>
                 </div>
                 <div class="nav-buttons">
                     <a href="index.html" class="nav-button active">
@@ -25,9 +25,25 @@
                         <i class="fas fa-tasks"></i>
                         Project Tracking
                     </a>
+                    <a href="#" class="nav-button">
+                        <i class="fas fa-chart-line"></i>
+                        Analytics
+                    </a>
+                    <a href="#" class="nav-button">
+                        <i class="fas fa-file-alt"></i>
+                        Reports
+                    </a>
                 </div>
             </div>
             <div class="nav-right">
+                <div class="search-bar">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" placeholder="Search projects, regions..." class="search-input">
+                </div>
+                <div class="notification-bell">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </div>
                 <div class="profile-menu">
                     <button class="profile-button" id="profileButton">
                         <img src="assets/default-avatar.png" alt="Profile" class="profile-avatar">
@@ -35,17 +51,29 @@
                         <i class="fas fa-chevron-down"></i>
                     </button>
                     <div class="profile-dropdown" id="profileDropdown">
-                        <a href="profile-settings.html" class="profile-dropdown-item" target="_blank">
+                        <div class="dropdown-header">
+                            <img src="assets/default-avatar.png" alt="Profile" class="dropdown-avatar">
+                            <div class="dropdown-user-info">
+                                <span class="dropdown-name">John Doe</span>
+                                <span class="dropdown-role">Project Manager</span>
+                            </div>
+                        </div>
+                        <a href="profile-settings.html" class="profile-dropdown-item">
                             <i class="fas fa-user"></i>
                             Profile Settings
                         </a>
-                        <a href="notifications.html" class="profile-dropdown-item" target="_blank">
+                        <a href="notifications.html" class="profile-dropdown-item">
                             <i class="fas fa-bell"></i>
                             Notifications
+                            <span class="item-badge">3</span>
                         </a>
-                        <a href="account-settings.html" class="profile-dropdown-item" target="_blank">
+                        <a href="account-settings.html" class="profile-dropdown-item">
                             <i class="fas fa-cog"></i>
                             Account Settings
+                        </a>
+                        <a href="#" class="profile-dropdown-item">
+                            <i class="fas fa-question-circle"></i>
+                            Help & Support
                         </a>
                         <div class="dropdown-divider"></div>
                         <a href="login.html" class="profile-dropdown-item text-danger">
@@ -59,43 +87,206 @@
 
         <!-- Metrics Bar -->
         <div class="metrics-bar">
-            <div class="metric">
-                <span class="metric-label">Active Sites</span>
-                <span class="metric-value" id="total-sites">--</span>
+            <div class="metric" id="active-sites-metric">
+                <div class="metric-icon">
+                    <i class="fas fa-broadcast-tower"></i>
+                </div>
+                <div class="metric-content">
+                    <span class="metric-label">Active Sites</span>
+                    <span class="metric-value" id="total-sites">--</span>
+                </div>
+                <div class="metric-trend positive">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>12%</span>
+                </div>
+                <div class="metric-tooltip">
+                    <div class="tooltip-title">Active Construction Sites</div>
+                    <div class="tooltip-content">Sites currently under construction across all regions. 12% increase from last quarter.</div>
+                    <div class="tooltip-chart" id="sites-chart"></div>
+                </div>
             </div>
-            <div class="metric">
-                <span class="metric-label">Equipment Available</span>
-                <span class="metric-value" id="equipment-health">--</span>
+            <div class="metric" id="equipment-metric">
+                <div class="metric-icon">
+                    <i class="fas fa-truck"></i>
+                </div>
+                <div class="metric-content">
+                    <span class="metric-label">Equipment Available</span>
+                    <span class="metric-value" id="equipment-health">--</span>
+                </div>
+                <div class="metric-trend neutral">
+                    <i class="fas fa-minus"></i>
+                    <span>0%</span>
+                </div>
+                <div class="metric-tooltip">
+                    <div class="tooltip-title">Equipment Availability</div>
+                    <div class="tooltip-content">Percentage of total equipment currently available for deployment. No change from last month.</div>
+                    <div class="tooltip-chart" id="equipment-chart"></div>
+                </div>
             </div>
-            <div class="metric">
-                <span class="metric-label">Construction Teams</span>
-                <span class="metric-value" id="total-teams">--</span>
+            <div class="metric" id="teams-metric">
+                <div class="metric-icon">
+                    <i class="fas fa-hard-hat"></i>
+                </div>
+                <div class="metric-content">
+                    <span class="metric-label">Construction Teams</span>
+                    <span class="metric-value" id="total-teams">--</span>
+                </div>
+                <div class="metric-trend positive">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>5%</span>
+                </div>
+                <div class="metric-tooltip">
+                    <div class="tooltip-title">Construction Teams</div>
+                    <div class="tooltip-content">Number of active construction teams across all regions. 5% increase from last quarter due to expansion.</div>
+                    <div class="tooltip-chart" id="teams-chart"></div>
+                </div>
+            </div>
+            <div class="metric" id="projects-metric">
+                <div class="metric-icon">
+                    <i class="fas fa-project-diagram"></i>
+                </div>
+                <div class="metric-content">
+                    <span class="metric-label">Total Projects</span>
+                    <span class="metric-value" id="total-projects">--</span>
+                </div>
+                <div class="metric-trend positive">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>8%</span>
+                </div>
+                <div class="metric-tooltip">
+                    <div class="tooltip-title">Total Projects</div>
+                    <div class="tooltip-content">Total number of projects in all phases (planning, active, completed). 8% growth since last quarter.</div>
+                    <div class="tooltip-chart" id="projects-chart"></div>
+                </div>
+            </div>
+            <div class="metric" id="budget-metric">
+                <div class="metric-icon">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+                <div class="metric-content">
+                    <span class="metric-label">Budget Utilization</span>
+                    <span class="metric-value" id="budget-utilization">--</span>
+                </div>
+                <div class="metric-trend negative">
+                    <i class="fas fa-arrow-down"></i>
+                    <span>3%</span>
+                </div>
+                <div class="metric-tooltip">
+                    <div class="tooltip-title">Budget Utilization</div>
+                    <div class="tooltip-content">Percentage of allocated budget utilized. 3% decrease indicates improved cost efficiency.</div>
+                    <div class="tooltip-chart" id="budget-chart"></div>
+                </div>
             </div>
         </div>
 
         <!-- Map Container -->
         <div class="map-container">
             <div id="usa-map"></div>
+            
+            <!-- Legend -->
             <div class="legend">
                 <h3>Construction Regions</h3>
                 <div class="legend-item">
-                    <div class="legend-color" style="background: var(--secondary);"></div>
-                    <span>Active Construction</span>
+                    <div class="legend-color" style="background: #3182CE;"></div>
+                    <span>Pacific Northwest</span>
                 </div>
                 <div class="legend-item">
-                    <div class="legend-color" style="background: #e3f2fd;"></div>
-                    <span>Future Sites</span>
+                    <div class="legend-color" style="background: #38A169;"></div>
+                    <span>Midwest</span>
                 </div>
                 <div class="legend-item">
-                    <div class="legend-color" style="background: var(--primary);"></div>
-                    <span>Selected Region</span>
+                    <div class="legend-color" style="background: #805AD5;"></div>
+                    <span>Northeast</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #D69E2E;"></div>
+                    <span>Southeast</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #DD6B20;"></div>
+                    <span>Southwest</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #EDF2F7;"></div>
+                    <span>Future Regions</span>
                 </div>
             </div>
-            <div id="region-details" class="hidden">
-                <h2 id="region-title"></h2>
-                <div class="operations-grid" id="operations-content"></div>
-                <button onclick="closeDetails()" class="close-btn">Close</button>
+        </div>
+
+        <!-- Overlay -->
+        <div id="overlay" class="overlay"></div>
+
+        <!-- Region Overview Card -->
+        <div id="regionOverview" class="region-overview hidden">
+            <div class="region-header">
+                <h2 id="regionName"></h2>
+                <button class="close-button" onclick="closeRegionOverview()">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
+            <div class="region-content">
+                <div class="detail-section">
+                    <h3><i class="fas fa-chart-pie"></i> Project Overview</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <span class="stat-value" id="totalProjects">0</span>
+                            <span class="stat-label">Total Projects</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value" id="activeProjects">0</span>
+                            <span class="stat-label">Active Projects</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value" id="completedProjects">0</span>
+                            <span class="stat-label">Completed Projects</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="detail-section">
+                    <h3><i class="fas fa-tasks"></i> Project Status</h3>
+                    <div class="status-grid">
+                        <div class="status-item">
+                            <div class="status-bar">
+                                <div class="status-fill" id="onTrackStatus" style="width: 0%"></div>
+                            </div>
+                            <span class="status-label">On Track</span>
+                            <span class="status-value" id="onTrackValue">0%</span>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-bar">
+                                <div class="status-fill warning" id="atRiskStatus" style="width: 0%"></div>
+                            </div>
+                            <span class="status-label">At Risk</span>
+                            <span class="status-value" id="atRiskValue">0%</span>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-bar">
+                                <div class="status-fill danger" id="delayedStatus" style="width: 0%"></div>
+                            </div>
+                            <span class="status-label">Delayed</span>
+                            <span class="status-value" id="delayedValue">0%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="detail-section">
+                    <h3><i class="fas fa-flag"></i> Top Milestones</h3>
+                    <div class="milestone-list" id="topMilestones">
+                        <!-- Milestones will be added dynamically -->
+                    </div>
+                </div>
+            </div>
+            <div class="region-footer">
+                <a href="project-tracking.html" class="view-all-link">
+                    View All Projects
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+
+        <div id="region-details" class="hidden">
+            <h2 id="region-title"></h2>
+            <div class="operations-grid" id="operations-content"></div>
+            <button onclick="closeDetails()" class="close-btn">Close</button>
         </div>
     </div>
     <div id="tooltip" class="tooltip hidden"></div>
