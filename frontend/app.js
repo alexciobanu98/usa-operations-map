@@ -403,331 +403,279 @@ function handleStateClick(d) {
     }
 }
 
-function showRegionOverview(regionId) {
-    console.log("Showing region overview for:", regionId);
-    const region = regions[regionId];
-    const details = regionDetails[regionId];
-
-    if (!region || !details) {
-        console.error("Missing data for region:", regionId);
+// Check if user is authenticated
+document.addEventListener('DOMContentLoaded', async function() {
+    // Redirect to login if not authenticated
+    if (!ApiService.isAuthenticated()) {
+        window.location.href = 'login.html';
         return;
     }
-
-    // Add region color to header
-    document.querySelector('.region-header').style.background = region.color;
-
-    // Update region name
-    document.getElementById('regionName').textContent = region.name;
-
-    // Update project stats with animation
-    animateCounter('totalProjects', 0, details.totalProjects);
-    animateCounter('activeProjects', 0, details.activeProjects);
-    animateCounter('completedProjects', 0, details.completedProjects);
-
-    // Update status bars with animation
-    setTimeout(() => {
-        document.getElementById('onTrackStatus').style.width = `${details.projectStatus.onTrack}%`;
-        document.getElementById('onTrackValue').textContent = `${details.projectStatus.onTrack}%`;
-        
-        document.getElementById('atRiskStatus').style.width = `${details.projectStatus.atRisk}%`;
-        document.getElementById('atRiskValue').textContent = `${details.projectStatus.atRisk}%`;
-        
-        document.getElementById('delayedStatus').style.width = `${details.projectStatus.delayed}%`;
-        document.getElementById('delayedValue').textContent = `${details.projectStatus.delayed}%`;
-    }, 300);
-
-    // Update milestones with staggered animation
-    const milestonesList = document.getElementById('topMilestones');
-    milestonesList.innerHTML = '';
     
-    details.topMilestones.forEach((milestone, index) => {
-        setTimeout(() => {
-            const milestoneItem = document.createElement('div');
-            milestoneItem.className = 'milestone-item';
-            milestoneItem.style.opacity = '0';
-            milestoneItem.style.transform = 'translateX(20px)';
-            milestoneItem.innerHTML = `
-                <div class="milestone-date">${milestone.date}</div>
-                <div class="milestone-title">${milestone.title}</div>
+    // Load user data
+    const currentUser = ApiService.getCurrentUser();
+    if (currentUser) {
+        // Update profile button with user info
+        const profileButton = document.getElementById('profileButton');
+        if (profileButton) {
+            const userInitial = currentUser.username.charAt(0).toUpperCase();
+            profileButton.innerHTML = `
+                <div class="profile-avatar">${userInitial}</div>
+                <span class="profile-name">${currentUser.username}</span>
+                <i class="fas fa-chevron-down"></i>
             `;
-            milestonesList.appendChild(milestoneItem);
-            
-            // Trigger animation after adding to DOM
-            setTimeout(() => {
-                milestoneItem.style.opacity = '1';
-                milestoneItem.style.transform = 'translateX(0)';
-                milestoneItem.style.transition = 'all 0.3s ease';
-            }, 50);
-        }, index * 150);
-    });
-
-    // Show overlay and card
-    document.getElementById('overlay').classList.add('active');
-    document.getElementById('regionOverview').classList.remove('hidden');
-    
-    // Update View All Projects link
-    document.querySelector('.view-all-link').href = `project-tracking.html?region=${regionId}`;
-}
-
-// Function to animate counter
-function animateCounter(elementId, start, end) {
-    const element = document.getElementById(elementId);
-    const duration = 1000;
-    const frameDuration = 1000/60;
-    const totalFrames = Math.round(duration / frameDuration);
-    const increment = (end - start) / totalFrames;
-    
-    let currentFrame = 0;
-    let currentValue = start;
-    
-    const animate = () => {
-        currentFrame++;
-        currentValue += increment;
-        
-        element.textContent = Math.floor(currentValue);
-        
-        if (currentFrame < totalFrames) {
-            requestAnimationFrame(animate);
-        } else {
-            element.textContent = end;
         }
-    };
+    }
     
-    animate();
+    // Initialize the map and load data
+    initializeMap();
+});
+
+// Initialize map and load data
+async function initializeMap() {
+    try {
+        // Try to load project data from API
+        let projectsSummary = {};
+        let overallMetrics = {};
+        
+        try {
+            projectsSummary = await ApiService.getProjectsSummaryByRegion();
+            overallMetrics = await ApiService.getOverallMetrics();
+            console.log("API data loaded successfully", projectsSummary, overallMetrics);
+        } catch (error) {
+            console.warn("Could not load data from API, using mock data instead:", error);
+            // Use mock data if API fails
+            projectsSummary = {
+                pnw: { totalProjects: 24, activeProjects: 18, completedProjects: 6 },
+                midwest: { totalProjects: 45, activeProjects: 32, completedProjects: 13 },
+                northeast: { totalProjects: 36, activeProjects: 22, completedProjects: 14 },
+                southeast: { totalProjects: 52, activeProjects: 38, completedProjects: 14 },
+                southwest: { totalProjects: 31, activeProjects: 19, completedProjects: 12 },
+                west: { totalProjects: 40, activeProjects: 28, completedProjects: 12 }
+            };
+            
+            overallMetrics = {
+                totalProjects: 228,
+                activeProjects: 157,
+                completedProjects: 71,
+                totalSites: 162,
+                activeSites: 126
+            };
+        }
+        
+        // Update region data with data from API or mock data
+        Object.keys(regions).forEach(regionId => {
+            if (projectsSummary[regionId]) {
+                regionData[regionId] = projectsSummary[regionId];
+            } else {
+                // Fallback to mock data
+                regionData[regionId] = regionDetails[regionId] || { 
+                    totalProjects: 0, 
+                    activeProjects: 0, 
+                    completedProjects: 0 
+                };
+            }
+        });
+        
+        // Update metrics with real data or mock data
+        updateMetricsSummary(overallMetrics);
+        
+        // Continue with map initialization
+        loadMapData();
+    } catch (error) {
+        console.error('Error loading data:', error);
+        // Show error message to user
+        const mapContainer = document.getElementById('map-container');
+        if (mapContainer) {
+            mapContainer.innerHTML = `
+                <div class="error-message">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h3>Error Loading Data</h3>
+                    <p>${error.message || 'Could not load map data. Please try again later.'}</p>
+                    <button onclick="initializeMap()" class="retry-button">Retry</button>
+                </div>
+            `;
+        } else {
+            // Fallback to just loading the map with mock data
+            loadMapData();
+        }
+    }
 }
 
-function closeRegionOverview() {
-    document.getElementById('overlay').classList.remove('active');
+// Load map data from D3
+function loadMapData() {
+    d3.json("https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json").then(us => {
+        // Convert TopoJSON to GeoJSON
+        const states = topojson.feature(us, us.objects.states);
+        
+        // Get state name mapping
+        const stateNames = {};
+        states.features.forEach(d => {
+            const id = d.id;
+            const stateName = d.properties.name;
+            stateNames[id] = stateName;
+        });
+        
+        // Create the map
+        createMap(us, stateNames);
+    }).catch(error => {
+        console.error('Error loading map data:', error);
+    });
+}
+
+// Show region overview with real data
+async function showRegionOverview(regionId) {
+    // Show loading state
+    const overlay = document.getElementById('overlay');
+    const regionOverview = document.getElementById('regionOverview');
+    
+    overlay.style.display = 'flex';
+    regionOverview.classList.remove('hidden');
+    regionOverview.innerHTML = `
+        <div class="region-header">
+            <h2>${regions[regionId].name}</h2>
+            <button class="close-button" onclick="closeRegionOverview()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="loading-container">
+            <div class="spinner"></div>
+            <p>Loading region data...</p>
+        </div>
+    `;
+    
+    try {
+        // Fetch region projects from API
+        let regionProjects = [];
+        try {
+            regionProjects = await ApiService.getProjectsByRegion(regionId);
+        } catch (error) {
+            console.warn('Could not fetch projects from API, using mock data:', error);
+            // Use mock data if API fails
+            regionProjects = mockProjectData[regionId]?.projects || [];
+        }
+        
+        // Get region details
+        const details = regionDetails[regionId];
+        if (!details) {
+            throw new Error('Region details not found');
+        }
+        
+        // Update region name
+        document.getElementById('regionName').textContent = regions[regionId].name;
+        
+        // Update project stats with animation
+        animateCounter('totalProjects', 0, details.totalProjects);
+        animateCounter('activeProjects', 0, details.activeProjects);
+        animateCounter('completedProjects', 0, details.completedProjects);
+        
+        // Update status bars with animation
+        setTimeout(() => {
+            document.getElementById('onTrackStatus').style.width = `${details.projectStatus.onTrack}%`;
+            document.getElementById('onTrackValue').textContent = `${details.projectStatus.onTrack}%`;
+            
+            document.getElementById('atRiskStatus').style.width = `${details.projectStatus.atRisk}%`;
+            document.getElementById('atRiskValue').textContent = `${details.projectStatus.atRisk}%`;
+            
+            document.getElementById('delayedStatus').style.width = `${details.projectStatus.delayed}%`;
+            document.getElementById('delayedValue').textContent = `${details.projectStatus.delayed}%`;
+        }, 300);
+        
+        // Update milestones with staggered animation
+        const milestonesList = document.getElementById('topMilestones');
+        milestonesList.innerHTML = '';
+        
+        details.topMilestones.forEach((milestone, index) => {
+            setTimeout(() => {
+                const milestoneItem = document.createElement('div');
+                milestoneItem.className = 'milestone-item';
+                milestoneItem.style.opacity = '0';
+                milestoneItem.style.transform = 'translateX(20px)';
+                milestoneItem.innerHTML = `
+                    <div class="milestone-date">${milestone.date}</div>
+                    <div class="milestone-title">${milestone.title}</div>
+                `;
+                milestonesList.appendChild(milestoneItem);
+                
+                // Trigger animation after adding to DOM
+                setTimeout(() => {
+                    milestoneItem.style.opacity = '1';
+                    milestoneItem.style.transform = 'translateX(0)';
+                    milestoneItem.style.transition = 'all 0.3s ease';
+                }, 50);
+            }, index * 150);
+        });
+        
+    } catch (error) {
+        console.error('Error loading region data:', error);
+        regionOverview.innerHTML = `
+            <div class="region-header">
+                <h2>Error</h2>
+                <button class="close-button" onclick="closeRegionOverview()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="error-message">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p>Failed to load region data. Please try again later.</p>
+                <button onclick="showRegionOverview('${regionId}')" class="retry-button">Retry</button>
+            </div>
+        `;
+    }
+}
+
+// Make closeRegionOverview function globally accessible
+window.closeRegionOverview = function() {
+    document.getElementById('overlay').style.display = 'none';
     document.getElementById('regionOverview').classList.add('hidden');
 }
 
-// Add click handler to overlay
-document.addEventListener('DOMContentLoaded', function() {
-    const overlay = document.getElementById('overlay');
-    if (overlay) {
-        overlay.addEventListener('click', closeRegionOverview);
-    }
-});
-
-// Load region data
-fetch('/api/regions')
-    .then(response => response.json())
-    .then(data => {
-        regionData = data;
-        updateMetricsSummary();
-    })
-    .catch(error => console.error('Error loading region data:', error));
-
-function updateMetricsSummary() {
-    let totalSites = 0;
-    let totalTeams = 0;
-    let equipmentHealth = "Good";
-
-    for (const [regionId, details] of Object.entries(regionData)) {
-        totalSites += details.activeSites || 0;
-        totalTeams += details.teams || 0;
-    }
-
-    document.getElementById("total-sites").textContent = totalSites;
-    document.getElementById("total-teams").textContent = totalTeams;
-    document.getElementById("equipment-health").textContent = equipmentHealth;
-}
-
-// Profile dropdown functionality
-document.addEventListener('DOMContentLoaded', function() {
-    const profileButton = document.getElementById('profileButton');
-    const profileDropdown = document.getElementById('profileDropdown');
-    
-    if (profileButton && profileDropdown) {
-        profileButton.addEventListener('click', function(e) {
-            e.stopPropagation();
-            profileDropdown.classList.toggle('active');
-        });
-        
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(e) {
-            if (!profileDropdown.contains(e.target) && !profileButton.contains(e.target)) {
-                profileDropdown.classList.remove('active');
-            }
-        });
-    }
-    
-    // Initialize notification bell functionality
-    const notificationBell = document.querySelector('.notification-bell');
-    if (notificationBell) {
-        notificationBell.addEventListener('click', function() {
-            alert('Notifications panel would open here');
-        });
-    }
-    
-    // Initialize search functionality
-    const searchInput = document.querySelector('.search-input');
-    if (searchInput) {
-        searchInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                alert(`Search results for: ${this.value}`);
-            }
-        });
-    }
-});
-
 // Update metrics summary with real data and animations
-function updateMetricsSummary() {
-    // National metrics data
-    const nationalMetrics = {
-        totalSites: 162,
-        equipmentAvailable: "78%",
-        totalTeams: 84,
-        totalProjects: 162,
-        budgetUtilization: "92%"
-    };
-
-    // Animate metrics
-    animateCounter('total-sites', 0, nationalMetrics.totalSites);
-    
-    setTimeout(() => {
-        document.getElementById('equipment-health').textContent = nationalMetrics.equipmentAvailable;
-    }, 200);
-    
-    setTimeout(() => {
-        animateCounter('total-teams', 0, nationalMetrics.totalTeams);
-    }, 400);
-    
-    setTimeout(() => {
-        animateCounter('total-projects', 0, nationalMetrics.totalProjects);
-    }, 600);
-    
-    setTimeout(() => {
-        document.getElementById('budget-utilization').textContent = nationalMetrics.budgetUtilization;
-    }, 800);
-
-    // Initialize mini charts in tooltips
-    initializeMetricCharts();
-}
-
-// Initialize mini charts for metrics tooltips
-function initializeMetricCharts() {
-    // This would typically use a charting library like Chart.js
-    // For now, we'll just add a placeholder visual
-    const chartElements = [
-        'sites-chart', 'equipment-chart', 'teams-chart', 
-        'projects-chart', 'budget-chart'
-    ];
-    
-    chartElements.forEach(id => {
-        const element = document.getElementById(id);
-        if (element) {
-            // Create a simple visual representation
-            element.innerHTML = `
-                <div style="display: flex; align-items: flex-end; height: 100%; gap: 2px;">
-                    ${generateMiniChartBars()}
-                </div>
-            `;
+async function updateMetricsSummary(metrics) {
+    // If metrics not provided, try to fetch from API
+    if (!metrics) {
+        try {
+            metrics = await ApiService.getOverallMetrics();
+        } catch (error) {
+            console.error('Error fetching metrics:', error);
+            return;
         }
-    });
-}
-
-// Generate random bars for mini charts
-function generateMiniChartBars() {
-    let bars = '';
-    const months = 12;
-    
-    for (let i = 0; i < months; i++) {
-        const height = 20 + Math.floor(Math.random() * 20);
-        const color = i < 9 ? '#E2E8F0' : '#3182CE';
-        bars += `<div style="flex: 1; height: ${height}px; background-color: ${color}; border-radius: 1px;"></div>`;
     }
     
-    return bars;
+    // Update metrics with real data
+    const totalProjects = document.getElementById('total-projects-metric');
+    const activeProjects = document.getElementById('active-projects-metric');
+    const completedProjects = document.getElementById('completed-projects-metric');
+    const totalSites = document.getElementById('total-sites-metric');
+    
+    if (totalProjects) totalProjects.textContent = metrics.totalProjects || 0;
+    if (activeProjects) activeProjects.textContent = metrics.activeProjects || 0;
+    if (completedProjects) completedProjects.textContent = metrics.completedProjects || 0;
+    if (totalSites) totalSites.textContent = metrics.totalSites || 0;
+    
+    // Update progress bars
+    const projectsProgress = document.getElementById('projects-progress');
+    const sitesProgress = document.getElementById('sites-progress');
+    
+    if (projectsProgress && metrics.totalProjects > 0) {
+        const completionPercentage = (metrics.completedProjects / metrics.totalProjects) * 100;
+        projectsProgress.style.width = `${completionPercentage}%`;
+    }
+    
+    if (sitesProgress && metrics.totalSites > 0) {
+        const activeSitesPercentage = (metrics.activeSites / metrics.totalSites) * 100;
+        sitesProgress.style.width = `${activeSitesPercentage}%`;
+    }
+    
+    // Initialize charts
+    initializeMetricCharts(metrics);
 }
 
-// Add click handlers to metrics for more interactivity
+// Logout functionality
 document.addEventListener('DOMContentLoaded', function() {
-    const metrics = document.querySelectorAll('.metric');
-    
-    metrics.forEach(metric => {
-        metric.addEventListener('click', function() {
-            const metricId = this.id;
-            showMetricDetails(metricId);
-        });
-    });
-    
-    // Initialize metrics on page load
-    updateMetricsSummary();
-});
-
-// Show detailed information when clicking on a metric
-function showMetricDetails(metricId) {
-    console.log(`Showing detailed information for: ${metricId}`);
-    // In a real implementation, this would show a modal or navigate to a detailed view
-    // For now, we'll just log to console
-    
-    const metricLabels = {
-        'active-sites-metric': 'Active Sites',
-        'equipment-metric': 'Equipment Availability',
-        'teams-metric': 'Construction Teams',
-        'projects-metric': 'Total Projects',
-        'budget-metric': 'Budget Utilization'
-    };
-    
-    alert(`Detailed view for ${metricLabels[metricId]} would appear here.`);
-}
-
-// Notification functionality
-document.addEventListener('DOMContentLoaded', function() {
-    const notificationBell = document.querySelector('.notification-bell');
-    const notificationDropdown = document.querySelector('.notification-dropdown');
-    const markAllReadButton = document.querySelector('.mark-all-read');
-    const notificationItems = document.querySelectorAll('.notification-item');
-    const notificationBadge = document.querySelector('.notification-badge');
-    
-    // Toggle notification dropdown
-    if (notificationBell) {
-        notificationBell.addEventListener('click', function(e) {
-            e.stopPropagation();
-            notificationDropdown.classList.toggle('show');
-            
-            // Close profile dropdown if open
-            const profileDropdown = document.getElementById('profileDropdown');
-            if (profileDropdown && profileDropdown.classList.contains('show')) {
-                profileDropdown.classList.remove('show');
-            }
+    const logoutButton = document.getElementById('logoutButton');
+    if (logoutButton) {
+        logoutButton.addEventListener('click', function() {
+            ApiService.logout();
         });
     }
-    
-    // Close dropdown when clicking outside
-    document.addEventListener('click', function(e) {
-        if (notificationDropdown && !e.target.closest('.notification-bell')) {
-            notificationDropdown.classList.remove('show');
-        }
-    });
-    
-    // Mark all notifications as read
-    if (markAllReadButton) {
-        markAllReadButton.addEventListener('click', function() {
-            notificationItems.forEach(item => {
-                item.classList.remove('unread');
-            });
-            
-            // Update badge
-            notificationBadge.textContent = '0';
-            notificationBadge.style.display = 'none';
-        });
-    }
-    
-    // Mark individual notification as read
-    notificationItems.forEach(item => {
-        item.addEventListener('click', function() {
-            this.classList.remove('unread');
-            
-            // Update badge count
-            const unreadCount = document.querySelectorAll('.notification-item.unread').length;
-            if (unreadCount > 0) {
-                notificationBadge.textContent = unreadCount;
-            } else {
-                notificationBadge.textContent = '0';
-                notificationBadge.style.display = 'none';
-            }
-        });
-    });
 });

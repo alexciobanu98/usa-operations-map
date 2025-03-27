@@ -3,47 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Utilities One Wireless - Project Management Platform</title>
+    <title>Login - USA Operations Map</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body class="login-page">
     <div class="login-container">
+        <!-- Login Card -->
         <div class="login-card">
             <div class="login-header">
-                <img src="assets/logo.png" alt="Utilities One Wireless Logo" class="login-logo">
-                <h1>Project Management Platform</h1>
-                <p>Welcome back! Please login to your account.</p>
+                <img src="images/logo.png" alt="USA Operations Map Logo" class="login-logo">
+                <h1>Welcome Back</h1>
+                <p>Sign in to your account to continue</p>
             </div>
+            
+            <div id="login-alert" class="login-alert" style="display: none;">
+                <i class="fas fa-exclamation-circle"></i>
+                <span id="alert-message"></span>
+            </div>
+            
             <form id="login-form" class="login-form">
                 <div class="form-group">
-                    <label for="username">
-                        <i class="fas fa-user"></i>
-                        Username
-                    </label>
-                    <input type="text" id="username" name="username" required>
+                    <label for="username"><i class="fas fa-user"></i> Username</label>
+                    <input type="text" id="username" name="username" placeholder="Enter your username">
                 </div>
+                
                 <div class="form-group">
-                    <label for="password">
-                        <i class="fas fa-lock"></i>
-                        Password
-                    </label>
-                    <input type="password" id="password" name="password" required>
+                    <label for="password"><i class="fas fa-lock"></i> Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password">
                 </div>
+                
                 <div class="form-options">
                     <label class="remember-me">
                         <input type="checkbox" name="remember">
-                        Remember me
+                        <span>Remember me</span>
                     </label>
+                    
                     <a href="#" class="forgot-password">Forgot password?</a>
                 </div>
-                <button type="submit" class="login-button">
-                    <span>Login</span>
-                    <i class="fas fa-arrow-right"></i>
+                
+                <button type="submit" id="login-button" class="login-button">
+                    <span>Sign In</span>
+                    <i class="fas fa-sign-in-alt"></i>
                 </button>
+                
+                <div id="login-loading" class="login-loading">
+                    <div class="spinner"></div>
+                    <span>Signing in...</span>
+                </div>
             </form>
+            
+            <div class="login-footer">
+                Don't have an account? <a href="#" id="show-register">Create one</a>
+            </div>
+        </div>
+        
+        <!-- Register Card -->
+        <div id="register-card" class="login-card register-card">
+            <div class="login-header">
+                <img src="images/logo.png" alt="USA Operations Map Logo" class="login-logo">
+                <h1>Create Account</h1>
+                <p>Sign up to get started with USA Operations Map</p>
+            </div>
+            
+            <div id="register-alert" class="login-alert" style="display: none;">
+                <i class="fas fa-exclamation-circle"></i>
+                <span id="register-alert-message"></span>
+            </div>
+            
+            <form id="register-form" class="login-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="first-name"><i class="fas fa-user"></i> First Name</label>
+                        <input type="text" id="first-name" name="first_name" placeholder="First name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="last-name"><i class="fas fa-user"></i> Last Name</label>
+                        <input type="text" id="last-name" name="last_name" placeholder="Last name">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="reg-username"><i class="fas fa-user-tag"></i> Username</label>
+                    <input type="text" id="reg-username" name="username" placeholder="Choose a username">
+                </div>
+                
+                <div class="form-group">
+                    <label for="email"><i class="fas fa-envelope"></i> Email</label>
+                    <input type="email" id="email" name="email" placeholder="Your email address">
+                </div>
+                
+                <div class="form-group">
+                    <label for="reg-password"><i class="fas fa-lock"></i> Password</label>
+                    <input type="password" id="reg-password" name="password" placeholder="Create a password">
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirm-password"><i class="fas fa-lock"></i> Confirm Password</label>
+                    <input type="password" id="confirm-password" name="confirm_password" placeholder="Confirm your password">
+                </div>
+                
+                <button type="submit" id="register-button" class="login-button">
+                    <span>Create Account</span>
+                    <i class="fas fa-user-plus"></i>
+                </button>
+                
+                <div id="register-loading" class="login-loading">
+                    <div class="spinner"></div>
+                    <span>Creating your account...</span>
+                </div>
+            </form>
+            
+            <div class="login-footer">
+                Already have an account? <a href="#" id="show-login">Sign in</a>
+            </div>
         </div>
     </div>
+    
+    <script src="api-service.js"></script>
     <script src="login.js"></script>
 </body>
 </html>

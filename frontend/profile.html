@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile Settings - Utilities One Wireless</title>
+    <title>Profile Settings - USA Operations Map</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -11,10 +11,8 @@
     <div class="container">
         <header class="header">
             <div class="logo-title">
-                <img src="assets/logo.png" alt="Utilities One Wireless Logo" class="logo">
-                <div class="title-container">
-                    <h1>Project Management Platform</h1>
-                </div>
+                <img src="logo.svg" alt="Logo" class="logo">
+                <h1>USA <span class="title-highlight">Operations</span></h1>
             </div>
             <div class="nav-buttons">
                 <a href="index.html" class="nav-button">
@@ -31,82 +29,160 @@
                 </a>
             </div>
             <div class="profile-menu">
-                <a href="profile.html" class="profile-button active">
+                <button class="profile-button" id="profileButton">
                     <img src="assets/default-avatar.png" alt="Profile" class="profile-avatar">
                     <span class="profile-name">John Doe</span>
-                    <i class="fas fa-cog"></i>
-                </a>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <a href="profile.html" class="dropdown-item active">
+                        <i class="fas fa-user"></i> Profile Settings
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-cog"></i> Account Settings
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </div>
             </div>
         </header>
 
         <div class="content-container">
             <div class="profile-settings">
                 <div class="profile-header">
+                    <button id="back-button" class="back-button">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </button>
                     <h2>Profile Settings</h2>
                     <p>Manage your account settings and preferences</p>
                 </div>
 
+                <div class="profile-tabs">
+                    <button class="tab-button active" data-tab="personal">Personal Info</button>
+                    <button class="tab-button" data-tab="security">Security</button>
+                    <button class="tab-button" data-tab="preferences">Preferences</button>
+                    <button class="tab-button" data-tab="notifications">Notifications</button>
+                </div>
+
                 <div class="profile-sections">
-                    <div class="profile-section">
-                        <h3>Personal Information</h3>
-                        <form class="profile-form">
+                    <!-- Personal Information Tab -->
+                    <div class="profile-section active" id="personal-tab">
+                        <div class="profile-picture-section">
+                            <div class="profile-picture-container">
+                                <img src="assets/default-avatar.png" alt="Profile Picture" id="profile-picture">
+                                <div class="profile-picture-overlay">
+                                    <i class="fas fa-camera"></i>
+                                </div>
+                            </div>
+                            <input type="file" id="profile-picture-upload" accept="image/*" hidden>
+                            <button class="secondary-button" id="change-picture-button">Change Picture</button>
+                        </div>
+                        
+                        <form class="profile-form" id="personal-form">
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="firstName">First Name</label>
-                                    <input type="text" id="firstName" value="John">
+                                    <input type="text" id="firstName" value="John" required>
+                                    <div class="form-feedback"></div>
                                 </div>
                                 <div class="form-group">
                                     <label for="lastName">Last Name</label>
-                                    <input type="text" id="lastName" value="Doe">
+                                    <input type="text" id="lastName" value="Doe" required>
+                                    <div class="form-feedback"></div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="email">Email Address</label>
-                                <input type="email" id="email" value="john.doe@utilitiesonewireless.com">
+                                <input type="email" id="email" value="john.doe@example.com" required>
+                                <div class="form-feedback"></div>
                             </div>
                             <div class="form-group">
                                 <label for="phone">Phone Number</label>
                                 <input type="tel" id="phone" value="+1 (555) 123-4567">
+                                <div class="form-feedback"></div>
                             </div>
                             <div class="form-group">
                                 <label for="role">Role</label>
                                 <input type="text" id="role" value="Project Manager" readonly>
+                                <div class="form-note">Contact an administrator to change your role</div>
                             </div>
                         </form>
                     </div>
 
-                    <div class="profile-section">
+                    <!-- Security Tab -->
+                    <div class="profile-section" id="security-tab">
                         <h3>Change Password</h3>
-                        <form class="profile-form">
+                        <form class="profile-form" id="security-form">
                             <div class="form-group">
                                 <label for="currentPassword">Current Password</label>
-                                <input type="password" id="currentPassword">
+                                <div class="password-input-container">
+                                    <input type="password" id="currentPassword" required>
+                                    <button type="button" class="toggle-password">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                                <div class="form-feedback"></div>
                             </div>
                             <div class="form-group">
                                 <label for="newPassword">New Password</label>
-                                <input type="password" id="newPassword">
+                                <div class="password-input-container">
+                                    <input type="password" id="newPassword" required>
+                                    <button type="button" class="toggle-password">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                                <div class="password-strength">
+                                    <div class="strength-meter">
+                                        <div class="strength-segment"></div>
+                                        <div class="strength-segment"></div>
+                                        <div class="strength-segment"></div>
+                                        <div class="strength-segment"></div>
+                                    </div>
+                                    <span class="strength-text">Password strength</span>
+                                </div>
+                                <div class="form-feedback"></div>
                             </div>
                             <div class="form-group">
                                 <label for="confirmPassword">Confirm New Password</label>
-                                <input type="password" id="confirmPassword">
+                                <div class="password-input-container">
+                                    <input type="password" id="confirmPassword" required>
+                                    <button type="button" class="toggle-password">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                                <div class="form-feedback"></div>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="primary-button update-password-button">Update Password</button>
                             </div>
                         </form>
+
+                        <div class="security-section">
+                            <h3>Two-Factor Authentication</h3>
+                            <div class="toggle-container">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="twoFactorToggle">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                                <span class="toggle-label">Enable Two-Factor Authentication</span>
+                            </div>
+                            <p class="security-note">Two-factor authentication adds an extra layer of security to your account</p>
+                        </div>
                     </div>
 
-                    <div class="profile-section">
-                        <h3>Preferences</h3>
-                        <form class="profile-form">
+                    <!-- Preferences Tab -->
+                    <div class="profile-section" id="preferences-tab">
+                        <h3>Display Preferences</h3>
+                        <form class="profile-form" id="preferences-form">
                             <div class="form-group">
-                                <label class="checkbox-label">
-                                    <input type="checkbox" checked>
-                                    Email notifications for project updates
-                                </label>
-                            </div>
-                            <div class="form-group">
-                                <label class="checkbox-label">
-                                    <input type="checkbox" checked>
-                                    SMS notifications for urgent matters
-                                </label>
+                                <label for="theme">Theme</label>
+                                <select id="theme">
+                                    <option value="light">Light</option>
+                                    <option value="dark">Dark</option>
+                                    <option value="system">System Default</option>
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label for="timezone">Timezone</label>
@@ -117,14 +193,112 @@
                                     <option value="PT">Pacific Time (PT)</option>
                                 </select>
                             </div>
+                            <div class="form-group">
+                                <label for="dateFormat">Date Format</label>
+                                <select id="dateFormat">
+                                    <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+                                    <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+                                    <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="language">Language</label>
+                                <select id="language">
+                                    <option value="en">English</option>
+                                    <option value="es">Spanish</option>
+                                    <option value="fr">French</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Notifications Tab -->
+                    <div class="profile-section" id="notifications-tab">
+                        <h3>Notification Settings</h3>
+                        <form class="profile-form" id="notifications-form">
+                            <div class="notification-group">
+                                <h4>Email Notifications</h4>
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="emailProjectUpdates" checked>
+                                        <span class="checkbox-custom"></span>
+                                        Project updates
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="emailTaskAssignments" checked>
+                                        <span class="checkbox-custom"></span>
+                                        Task assignments
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="emailTeamMessages">
+                                        <span class="checkbox-custom"></span>
+                                        Team messages
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="notification-group">
+                                <h4>In-App Notifications</h4>
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="appProjectUpdates" checked>
+                                        <span class="checkbox-custom"></span>
+                                        Project updates
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="appTaskAssignments" checked>
+                                        <span class="checkbox-custom"></span>
+                                        Task assignments
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="appTeamMessages" checked>
+                                        <span class="checkbox-custom"></span>
+                                        Team messages
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="notification-group">
+                                <h4>SMS Notifications</h4>
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="smsUrgent" checked>
+                                        <span class="checkbox-custom"></span>
+                                        Urgent matters only
+                                    </label>
+                                </div>
+                            </div>
                         </form>
                     </div>
                 </div>
 
                 <div class="profile-actions">
-                    <button class="secondary-button">Cancel</button>
-                    <button class="primary-button">Save Changes</button>
+                    <button class="secondary-button" id="cancel-button">Cancel</button>
+                    <button class="primary-button" id="save-button">Save Changes</button>
                 </div>
+            </div>
+        </div>
+        
+        <!-- Toast Notification -->
+        <div class="toast-container">
+            <div class="toast" id="toast">
+                <div class="toast-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="toast-content">
+                    <p class="toast-message">Changes saved successfully!</p>
+                </div>
+                <button class="toast-close">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
         </div>
     </div>
