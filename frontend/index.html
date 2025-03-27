@@ -3,16 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Utilities One Wireless - Infrastructure Construction</title>
+    <title>Wireless Construction Management</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <img src="logo.svg" alt="Utilities One Wireless Logo" class="logo">
-            <div class="title-container">
-                <h1>Infrastructure Construction</h1>
-                <div class="subtitle">Tower Construction & Equipment Management</div>
+            <div class="logo-title">
+                <img src="logo.svg" alt="Utilities One Logo" class="logo">
+                <div class="title-container">
+                    <h1>Wireless Construction Management</h1>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <a href="project-tracking.html" class="nav-button">Project Tracking</a>
+            </div>
+            <div class="metrics">
+                <div class="metric">
+                    <span class="metric-label">Active Sites</span>
+                    <span class="metric-value" id="total-sites">--</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Equipment Available</span>
+                    <span class="metric-value" id="equipment-health">--</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Construction Teams</span>
+                    <span class="metric-value" id="total-teams">--</span>
+                </div>
             </div>
         </div>
         <div class="map-container">
@@ -30,20 +48,6 @@
                 <div class="legend-item">
                     <div class="legend-color" style="background: var(--primary);"></div>
                     <span>Selected Region</span>
-                </div>
-            </div>
-            <div class="metrics-summary">
-                <div class="metric">
-                    <span class="metric-label">Total Active Sites</span>
-                    <span class="metric-value" id="total-sites">--</span>
-                </div>
-                <div class="metric">
-                    <span class="metric-label">Equipment Health</span>
-                    <span class="metric-value" id="equipment-health">--</span>
-                </div>
-                <div class="metric">
-                    <span class="metric-label">Construction Teams</span>
-                    <span class="metric-value" id="total-teams">--</span>
                 </div>
             </div>
             <div id="region-details" class="hidden">

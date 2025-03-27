@@ -31,6 +31,11 @@ const svg = d3.select("#usa-map")
     .style("max-width", "100%")
     .style("height", "auto");
 
+// Create a group for states
+const statesGroup = svg.append("g").attr("class", "states");
+// Create a group for labels
+const labelsGroup = svg.append("g").attr("class", "labels");
+
 // Load region data
 fetch('/api/regions')
     .then(response => response.json())
@@ -48,8 +53,8 @@ function loadMap() {
         const states = topojson.feature(usData, usData.objects.states);
         const stateNames = new Map(usData.objects.states.geometries.map(d => [d.id, d.properties.name]));
 
-        svg.append("g")
-            .selectAll("path")
+        // Add states
+        statesGroup.selectAll("path")
             .data(states.features)
             .join("path")
             .attr("d", path)
@@ -60,6 +65,21 @@ function loadMap() {
             .on("mousemove", moveTooltip)
             .on("mouseout", hideTooltip)
             .on("click", handleStateClick);
+
+        // Add state labels
+        labelsGroup.selectAll("text")
+            .data(states.features)
+            .join("text")
+            .attr("class", "state-label")
+            .attr("transform", d => `translate(${path.centroid(d)})`)
+            .attr("text-anchor", "middle")
+            .attr("dy", ".35em")
+            .style("font-size", "8px")
+            .style("font-weight", d => {
+                const stateAbbr = getStateAbbr(d.id, stateNames);
+                return isStateInRegions(stateAbbr) ? "bold" : "normal";
+            })
+            .text(d => getStateAbbr(d.id, stateNames));
     });
 }
 
@@ -75,6 +95,10 @@ function getRegionColor(stateAbbr) {
         }
     }
     return "#e3f2fd";
+}
+
+function isStateInRegions(stateAbbr) {
+    return Object.values(regions).some(region => region.states.includes(stateAbbr));
 }
 
 function getRegionForState(stateAbbr) {
@@ -99,7 +123,7 @@ function showTooltip(event, d) {
             .html(`
                 <strong>${data.name}</strong><br>
                 Active Sites: ${data.operations.construction.active_sites}<br>
-                Equipment Health: ${data.operations.equipment.health_status}%<br>
+                Equipment Available: ${data.operations.equipment.health_status}%<br>
                 Completion Rate: ${data.operations.construction.completion_rate}
             `);
         
@@ -149,7 +173,7 @@ function showRegionDetails(regionId) {
             <h3>Equipment</h3>
             <p>Inventory Status: ${data.operations.equipment.inventory_status}</p>
             <p>Major Equipment: ${data.operations.equipment.major_equipment.join(", ")}</p>
-            <p>Health Status: ${data.operations.equipment.health_status}%</p>
+            <p>Equipment Available: ${data.operations.equipment.health_status}%</p>
         </div>
     `);
     

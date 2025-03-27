@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Tracking - Wireless Construction Management</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo-title">
+                <img src="logo.svg" alt="Utilities One Logo" class="logo">
+                <div class="title-container">
+                    <h1>Project Tracking</h1>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <a href="index.html" class="nav-button">Map View</a>
+            </div>
+        </div>
+        <div class="content-container">
+            <!-- Region Summary Cards -->
+            <div class="region-summary">
+                <div class="project-card summary-card">
+                    <h2>Pacific Northwest</h2>
+                    <div class="project-stats">
+                        <div class="stat">
+                            <span class="stat-label">Active Projects</span>
+                            <span class="stat-value">15</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Completion Rate</span>
+                            <span class="stat-value">87%</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Equipment Deployed</span>
+                            <span class="stat-value">42</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card summary-card">
+                    <h2>Midwest Region</h2>
+                    <div class="project-stats">
+                        <div class="stat">
+                            <span class="stat-label">Active Projects</span>
+                            <span class="stat-value">23</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Completion Rate</span>
+                            <span class="stat-value">92%</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Equipment Deployed</span>
+                            <span class="stat-value">56</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project Table Section -->
+            <div class="projects-section">
+                <div class="table-header">
+                    <h2>Project Sites</h2>
+                    <div class="table-actions">
+                        <input type="text" placeholder="Search projects..." class="search-input">
+                        <select class="filter-select">
+                            <option value="">All Regions</option>
+                            <option value="pnw">Pacific Northwest</option>
+                            <option value="midwest">Midwest</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Smart Table -->
+                <div class="smart-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Site ID</th>
+                                <th>Project #</th>
+                                <th>Site Name</th>
+                                <th>Status</th>
+                                <th>Customer</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="projectTableBody">
+                            <!-- Table rows will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Project Detail Card (Hidden by default) -->
+            <div id="projectDetail" class="project-detail-modal hidden">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>Project Details</h2>
+                        <button class="close-button" onclick="closeProjectDetail()">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="detail-grid">
+                            <div class="detail-section">
+                                <h3>Basic Information</h3>
+                                <div class="detail-row">
+                                    <span class="detail-label">Site ID:</span>
+                                    <span class="detail-value" id="detail-siteId"></span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Project Number:</span>
+                                    <span class="detail-value" id="detail-projectNumber"></span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">PO Site ID:</span>
+                                    <span class="detail-value" id="detail-poSiteId"></span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Site Name:</span>
+                                    <span class="detail-value" id="detail-siteName"></span>
+                                </div>
+                            </div>
+                            <div class="detail-section">
+                                <h3>Project Specifications</h3>
+                                <div class="detail-row">
+                                    <span class="detail-label">Scope of Work:</span>
+                                    <span class="detail-value" id="detail-scopeOfWork"></span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Structure Type:</span>
+                                    <span class="detail-value" id="detail-structureType"></span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Customer:</span>
+                                    <span class="detail-value" id="detail-customer"></span>
+                                </div>
+                            </div>
+                            <div class="detail-section">
+                                <h3>Timeline</h3>
+                                <div class="detail-row">
+                                    <span class="detail-label">Forecasted Start:</span>
+                                    <span class="detail-value" id="detail-forecastedStart"></span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Actual Start:</span>
+                                    <span class="detail-value" id="detail-actualStart"></span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Forecasted Finish:</span>
+                                    <span class="detail-value" id="detail-forecastedFinish"></span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Actual Finish:</span>
+                                    <span class="detail-value" id="detail-actualFinish"></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-section full-width">
+                            <h3>Project Milestones</h3>
+                            <div class="milestone-timeline" id="milestone-timeline">
+                                <!-- Milestones will be populated by JavaScript -->
+                            </div>
+                        </div>
+
+                        <div class="detail-section full-width">
+                            <h3>Additional Information</h3>
+                            <div class="detail-row">
+                                <span class="detail-label">Subcontractor Crew:</span>
+                                <span class="detail-value" id="detail-subcontractor"></span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">PO Status:</span>
+                                <span class="detail-value" id="detail-poStatus"></span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Permits:</span>
+                                <span class="detail-value" id="detail-permits"></span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Site Address:</span>
+                                <span class="detail-value" id="detail-address"></span>
+                            </div>
+                        </div>
+
+                        <div class="detail-section full-width">
+                            <h3>Bill of Materials</h3>
+                            <div class="materials-table" id="materials-table">
+                                <!-- Materials table will be populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="project-tracking.js"></script>
+</body>
+</html>
