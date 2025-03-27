@@ -3,7 +3,17 @@
  * Handles all API calls to the backend server
  */
 class ApiService {
-    static API_URL = 'http://localhost:5000/api';
+    // Dynamically determine API URL based on environment
+    static get API_URL() {
+        // Check if we're in a production environment (Render)
+        if (window.location.hostname.includes('onrender.com')) {
+            // If frontend is on render.com, use the API service URL
+            return 'https://usa-operations-map-api.onrender.com/api';
+        }
+        // For local development
+        return 'http://localhost:5000/api';
+    }
+    
     static TOKEN_KEY = 'auth_token';
     static USER_KEY = 'user_data';
     
