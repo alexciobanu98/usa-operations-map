@@ -672,3 +672,62 @@ function showMetricDetails(metricId) {
     
     alert(`Detailed view for ${metricLabels[metricId]} would appear here.`);
 }
+
+// Notification functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const notificationBell = document.querySelector('.notification-bell');
+    const notificationDropdown = document.querySelector('.notification-dropdown');
+    const markAllReadButton = document.querySelector('.mark-all-read');
+    const notificationItems = document.querySelectorAll('.notification-item');
+    const notificationBadge = document.querySelector('.notification-badge');
+    
+    // Toggle notification dropdown
+    if (notificationBell) {
+        notificationBell.addEventListener('click', function(e) {
+            e.stopPropagation();
+            notificationDropdown.classList.toggle('show');
+            
+            // Close profile dropdown if open
+            const profileDropdown = document.getElementById('profileDropdown');
+            if (profileDropdown && profileDropdown.classList.contains('show')) {
+                profileDropdown.classList.remove('show');
+            }
+        });
+    }
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+        if (notificationDropdown && !e.target.closest('.notification-bell')) {
+            notificationDropdown.classList.remove('show');
+        }
+    });
+    
+    // Mark all notifications as read
+    if (markAllReadButton) {
+        markAllReadButton.addEventListener('click', function() {
+            notificationItems.forEach(item => {
+                item.classList.remove('unread');
+            });
+            
+            // Update badge
+            notificationBadge.textContent = '0';
+            notificationBadge.style.display = 'none';
+        });
+    }
+    
+    // Mark individual notification as read
+    notificationItems.forEach(item => {
+        item.addEventListener('click', function() {
+            this.classList.remove('unread');
+            
+            // Update badge count
+            const unreadCount = document.querySelectorAll('.notification-item.unread').length;
+            if (unreadCount > 0) {
+                notificationBadge.textContent = unreadCount;
+            } else {
+                notificationBadge.textContent = '0';
+                notificationBadge.style.display = 'none';
+            }
+        });
+    });
+});

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | USA Operations Map</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Top Navigation -->
+        <div class="top-nav">
+            <div class="nav-left">
+                <div class="logo-title">
+                    <img src="logo.svg" alt="Logo" class="logo">
+                    <h1>USA <span class="title-highlight">Operations</span></h1>
+                </div>
+                <div class="nav-buttons">
+                    <a href="index.html" class="nav-button">
+                        <i class="fas fa-map-marked-alt"></i> Map View
+                    </a>
+                    <a href="project-tracking.html" class="nav-button">
+                        <i class="fas fa-tasks"></i> Project Tracking
+                    </a>
+                    <a href="dashboard.html" class="nav-button active">
+                        <i class="fas fa-chart-line"></i> Dashboard
+                    </a>
+                    <a href="collaboration.html" class="nav-button">
+                        <i class="fas fa-users"></i> Collaboration
+                    </a>
+                </div>
+            </div>
+            <div class="nav-right">
+                <div class="search-bar">
+                    <input type="text" class="search-input" placeholder="Search...">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+                <div class="notification-bell" id="notificationBell">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge" id="notificationBadge">3</span>
+                    <!-- Notification Dropdown -->
+                    <div class="notification-dropdown" id="notificationDropdown">
+                        <div class="notification-header">
+                            <h3>Notifications</h3>
+                            <button class="mark-all-read" id="markAllRead">Mark all as read</button>
+                        </div>
+                        <div class="notification-body">
+                            <div class="notification-item unread">
+                                <div class="notification-icon">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <p class="notification-text"><strong>Project Delayed:</strong> Chicago Tower Upgrade is behind schedule.</p>
+                                    <p class="notification-time">2 hours ago</p>
+                                </div>
+                                <button class="notification-action">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                            </div>
+                            <div class="notification-item unread">
+                                <div class="notification-icon">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <p class="notification-text"><strong>Project Completed:</strong> Dallas Site Maintenance has been completed.</p>
+                                    <p class="notification-time">Yesterday</p>
+                                </div>
+                                <button class="notification-action">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                            </div>
+                            <div class="notification-item unread">
+                                <div class="notification-icon">
+                                    <i class="fas fa-dollar-sign"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <p class="notification-text"><strong>Budget Alert:</strong> Phoenix Tower Installation is over budget by 15%.</p>
+                                    <p class="notification-time">2 days ago</p>
+                                </div>
+                                <button class="notification-action">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="notification-footer">
+                            <a href="notifications.html" class="view-all-link">View all notifications</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-menu">
+                    <button class="profile-button" id="profileButton">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Profile" class="profile-avatar">
+                        <span class="profile-name">John Doe</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <a href="profile.html" class="profile-dropdown-item">
+                            <i class="fas fa-user"></i> My Profile
+                        </a>
+                        <a href="account-settings.html" class="profile-dropdown-item">
+                            <i class="fas fa-cog"></i> Account Settings
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="login.html" class="profile-dropdown-item text-danger">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Content -->
+        <div class="dashboard-container">
+            <!-- Summary Cards -->
+            <div class="dashboard-section">
+                <div class="summary-cards">
+                    <div class="summary-card">
+                        <div class="summary-icon">
+                            <i class="fas fa-project-diagram"></i>
+                        </div>
+                        <div class="summary-details">
+                            <h3>Total Projects</h3>
+                            <p class="summary-value">42</p>
+                            <p class="summary-trend positive">
+                                <i class="fas fa-arrow-up"></i> 12% from last month
+                            </p>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="summary-details">
+                            <h3>On-Time Projects</h3>
+                            <p class="summary-value">85%</p>
+                            <p class="summary-trend positive">
+                                <i class="fas fa-arrow-up"></i> 5% from last month
+                            </p>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-icon">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="summary-details">
+                            <h3>Budget Utilization</h3>
+                            <p class="summary-value">92%</p>
+                            <p class="summary-trend negative">
+                                <i class="fas fa-arrow-down"></i> 3% from last month
+                            </p>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="summary-details">
+                            <h3>Issues Reported</h3>
+                            <p class="summary-value">7</p>
+                            <p class="summary-trend negative">
+                                <i class="fas fa-arrow-up"></i> 2 more than last month
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="dashboard-row">
+                <div class="dashboard-column">
+                    <div class="dashboard-card">
+                        <div class="dashboard-card-header">
+                            <h3>Project Status Distribution</h3>
+                            <div class="card-actions">
+                                <button class="icon-button" id="refreshStatusChart">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                                <button class="icon-button" id="downloadStatusChart">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="dashboard-card-body">
+                            <canvas id="statusChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="dashboard-column">
+                    <div class="dashboard-card">
+                        <div class="dashboard-card-header">
+                            <h3>Budget vs. Actual Spending</h3>
+                            <div class="card-actions">
+                                <button class="icon-button" id="refreshBudgetChart">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                                <button class="icon-button" id="downloadBudgetChart">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="dashboard-card-body">
+                            <canvas id="budgetChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project Timeline -->
+            <div class="dashboard-section">
+                <div class="dashboard-card">
+                    <div class="dashboard-card-header">
+                        <h3>Project Timeline</h3>
+                        <div class="card-actions">
+                            <select id="timelineFilter" class="filter-select">
+                                <option value="all">All Projects</option>
+                                <option value="critical">Critical Projects</option>
+                                <option value="delayed">Delayed Projects</option>
+                            </select>
+                            <button class="icon-button" id="refreshTimeline">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                            <button class="icon-button" id="downloadTimeline">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="dashboard-card-body">
+                        <div class="timeline-container" id="projectTimeline">
+                            <!-- Timeline will be generated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Regional Performance -->
+            <div class="dashboard-section">
+                <div class="dashboard-card">
+                    <div class="dashboard-card-header">
+                        <h3>Regional Performance</h3>
+                        <div class="card-actions">
+                            <button class="icon-button" id="refreshRegionalChart">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                            <button class="icon-button" id="downloadRegionalChart">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="dashboard-card-body">
+                        <canvas id="regionalChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="dashboard-section">
+                <div class="dashboard-card">
+                    <div class="dashboard-card-header">
+                        <h3>Recent Activity</h3>
+                        <div class="card-actions">
+                            <button class="icon-button" id="refreshActivity">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="dashboard-card-body">
+                        <div class="activity-list">
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="fas fa-plus-circle"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <p class="activity-text"><strong>John Doe</strong> created a new project <a href="#">Seattle Tower Installation</a></p>
+                                    <p class="activity-time">Today, 10:30 AM</p>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="fas fa-edit"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <p class="activity-text"><strong>Jane Smith</strong> updated the status of <a href="#">Chicago Tower Upgrade</a> to "On Hold"</p>
+                                    <p class="activity-time">Today, 9:15 AM</p>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="fas fa-comment"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <p class="activity-text"><strong>Mike Johnson</strong> commented on <a href="#">Dallas Site Maintenance</a></p>
+                                    <p class="activity-time">Yesterday, 4:45 PM</p>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <p class="activity-text"><strong>Sarah Williams</strong> marked <a href="#">Phoenix Tower Installation</a> as complete</p>
+                                    <p class="activity-time">Yesterday, 2:30 PM</p>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="fas fa-file-upload"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <p class="activity-text"><strong>Robert Brown</strong> uploaded documents to <a href="#">Miami Site Survey</a></p>
+                                    <p class="activity-time">March 26, 2025</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>

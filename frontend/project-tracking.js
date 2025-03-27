@@ -689,23 +689,37 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize data
     fetchRegions();
     fetchProjects();
-
-    // Setup search functionality
-    document.querySelector('.search-input').addEventListener('input', function(e) {
-        const searchTerm = e.target.value.toLowerCase();
-        const rows = document.querySelectorAll('#projectTableBody tr');
-        
-        rows.forEach(row => {
-            const text = row.textContent.toLowerCase();
-            row.style.display = text.includes(searchTerm) ? '' : 'none';
+    
+    // Setup notification bell hover effect
+    const notificationBell = document.querySelector('.notification-bell');
+    if (notificationBell) {
+        notificationBell.addEventListener('click', function() {
+            alert('You have 3 new notifications');
         });
-    });
+    }
+    
+    // Setup search functionality
+    const searchInput = document.querySelector('.search-input');
+    if (searchInput) {
+        searchInput.addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll('#projectTableBody tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        });
+    }
 
     // Setup filter functionality
-    document.querySelector('.filter-select').addEventListener('change', function(e) {
-        const region = e.target.value;
-        fetchProjects(region);
-    });
+    const filterSelect = document.querySelector('.filter-select');
+    if (filterSelect) {
+        filterSelect.addEventListener('change', function(e) {
+            const region = e.target.value;
+            fetchProjects(region);
+        });
+    }
 
     // Initialize table with sample data
     populateTable(projectData);
@@ -750,6 +764,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const closeSiteModal = document.getElementById('closeSiteModal');
     const cancelSiteForm = document.getElementById('cancelSiteForm');
     
+    // Add Project Modal elements
+    const addProjectButton = document.getElementById('addProjectButton');
+    const addProjectModal = document.getElementById('addProjectModal');
+    const closeProjectModal = document.getElementById('closeProjectModal');
+    const cancelProjectForm = document.getElementById('cancelProjectForm');
+    
     // Form customization elements
     const fieldToggles = document.querySelectorAll('.field-toggle input[type="checkbox"]');
     const resetFormFields = document.getElementById('resetFormFields');
@@ -757,6 +777,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Form elements
     const newSiteForm = document.getElementById('newSiteForm');
+    const newProjectForm = document.getElementById('newProjectForm');
     const addMilestoneButton = document.getElementById('add-milestone');
     const milestonesContainer = document.getElementById('milestones-container');
     const documentUpload = document.getElementById('document-upload');
@@ -769,23 +790,48 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
+    // Open modal when clicking Add New Project button
+    if (addProjectButton) {
+        addProjectButton.addEventListener('click', function() {
+            addProjectModal.classList.add('active');
+        });
+    }
+    
     // Close modal functions
-    function closeModal() {
+    function closeSiteModalFunc() {
         addSiteModal.classList.remove('active');
     }
     
+    function closeProjectModalFunc() {
+        addProjectModal.classList.remove('active');
+    }
+    
     if (closeSiteModal) {
-        closeSiteModal.addEventListener('click', closeModal);
+        closeSiteModal.addEventListener('click', closeSiteModalFunc);
+    }
+    
+    if (closeProjectModal) {
+        closeProjectModal.addEventListener('click', closeProjectModalFunc);
     }
     
     if (cancelSiteForm) {
-        cancelSiteForm.addEventListener('click', closeModal);
+        cancelSiteForm.addEventListener('click', closeSiteModalFunc);
+    }
+    
+    if (cancelProjectForm) {
+        cancelProjectForm.addEventListener('click', closeProjectModalFunc);
     }
     
     // Close modal when clicking outside
     window.addEventListener('click', function(event) {
         if (event.target === addSiteModal) {
-            closeModal();
+            closeSiteModalFunc();
+        }
+    });
+    
+    window.addEventListener('click', function(event) {
+        if (event.target === addProjectModal) {
+            closeProjectModalFunc();
         }
     });
     
@@ -944,10 +990,35 @@ document.addEventListener('DOMContentLoaded', function() {
             addSiteToTable(siteData);
             
             // Close the modal
-            closeModal();
+            closeSiteModalFunc();
             
             // Reset the form
             newSiteForm.reset();
+        });
+    }
+    
+    // Handle Project Form Submission
+    if (newProjectForm) {
+        newProjectForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Collect form data
+            const formData = new FormData(newProjectForm);
+            const projectData = {};
+            
+            for (let [key, value] of formData.entries()) {
+                projectData[key] = value;
+            }
+            
+            // Here you would typically send the data to your backend
+            console.log('Project Data:', projectData);
+            
+            // For demo purposes, show success message and close modal
+            alert('Project created successfully!');
+            closeProjectModalFunc();
+            
+            // Reset form
+            newProjectForm.reset();
         });
     }
     
@@ -1039,4 +1110,496 @@ document.addEventListener('DOMContentLoaded', function() {
             word.charAt(0).toUpperCase() + word.slice(1)
         ).join(' ');
     }
+});
+
+// Notification functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const notificationBell = document.querySelector('.notification-bell');
+    const notificationDropdown = document.querySelector('.notification-dropdown');
+    const markAllReadButton = document.querySelector('.mark-all-read');
+    const notificationItems = document.querySelectorAll('.notification-item');
+    const notificationBadge = document.querySelector('.notification-badge');
+    
+    // Toggle notification dropdown
+    if (notificationBell) {
+        notificationBell.addEventListener('click', function(e) {
+            e.stopPropagation();
+            notificationDropdown.classList.toggle('show');
+            
+            // Close profile dropdown if open
+            const profileDropdown = document.getElementById('profileDropdown');
+            if (profileDropdown && profileDropdown.classList.contains('show')) {
+                profileDropdown.classList.remove('show');
+            }
+        });
+    }
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+        if (notificationDropdown && !e.target.closest('.notification-bell')) {
+            notificationDropdown.classList.remove('show');
+        }
+    });
+    
+    // Mark all notifications as read
+    if (markAllReadButton) {
+        markAllReadButton.addEventListener('click', function() {
+            notificationItems.forEach(item => {
+                item.classList.remove('unread');
+            });
+            
+            // Update badge
+            notificationBadge.textContent = '0';
+            notificationBadge.style.display = 'none';
+        });
+    }
+    
+    // Mark individual notification as read
+    notificationItems.forEach(item => {
+        item.addEventListener('click', function() {
+            this.classList.remove('unread');
+            
+            // Update badge count
+            const unreadCount = document.querySelectorAll('.notification-item.unread').length;
+            if (unreadCount > 0) {
+                notificationBadge.textContent = unreadCount;
+            } else {
+                notificationBadge.textContent = '0';
+                notificationBadge.style.display = 'none';
+            }
+        });
+    });
+});
+
+// Enhanced project tracking functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // View toggle functionality
+    const tableViewBtn = document.querySelector('.view-toggle-btn[data-view="table"]');
+    const cardsViewBtn = document.querySelector('.view-toggle-btn[data-view="cards"]');
+    const tableView = document.getElementById('tableView');
+    const cardView = document.getElementById('cardView');
+    
+    if (tableViewBtn && cardsViewBtn) {
+        tableViewBtn.addEventListener('click', function() {
+            tableViewBtn.classList.add('active');
+            cardsViewBtn.classList.remove('active');
+            tableView.classList.add('active');
+            cardView.classList.remove('active');
+        });
+        
+        cardsViewBtn.addEventListener('click', function() {
+            cardsViewBtn.classList.add('active');
+            tableViewBtn.classList.remove('active');
+            cardView.classList.add('active');
+            tableView.classList.remove('active');
+        });
+    }
+    
+    // Sortable table headers
+    const sortableHeaders = document.querySelectorAll('th.sortable');
+    let currentSortColumn = 'siteId';
+    let currentSortDirection = 'asc';
+    
+    if (sortableHeaders.length > 0) {
+        sortableHeaders.forEach(header => {
+            header.addEventListener('click', function() {
+                const column = this.getAttribute('data-sort');
+                
+                // Remove sorted classes from all headers
+                sortableHeaders.forEach(h => {
+                    h.classList.remove('sorted-asc', 'sorted-desc');
+                });
+                
+                // Toggle sort direction if clicking the same column
+                if (column === currentSortColumn) {
+                    currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
+                } else {
+                    currentSortColumn = column;
+                    currentSortDirection = 'asc';
+                }
+                
+                // Add sorted class to current header
+                this.classList.add(`sorted-${currentSortDirection}`);
+                
+                // Sort the table
+                sortTable(column, currentSortDirection);
+            });
+        });
+    }
+    
+    // Sort table function
+    function sortTable(column, direction) {
+        const tableBody = document.getElementById('projectTableBody');
+        const rows = Array.from(tableBody.querySelectorAll('tr'));
+        
+        // Sort the rows
+        rows.sort((a, b) => {
+            let aValue = a.querySelector(`td:nth-child(${getColumnIndex(column)})`).textContent.trim();
+            let bValue = b.querySelector(`td:nth-child(${getColumnIndex(column)})`).textContent.trim();
+            
+            // Handle date sorting
+            if (column === 'startDate' || column === 'endDate') {
+                aValue = aValue === 'N/A' ? new Date(0) : new Date(aValue);
+                bValue = bValue === 'N/A' ? new Date(0) : new Date(bValue);
+            }
+            
+            // Compare values
+            if (aValue < bValue) {
+                return direction === 'asc' ? -1 : 1;
+            }
+            if (aValue > bValue) {
+                return direction === 'asc' ? 1 : -1;
+            }
+            return 0;
+        });
+        
+        // Reorder the table
+        rows.forEach(row => tableBody.appendChild(row));
+    }
+    
+    // Helper function to get column index
+    function getColumnIndex(column) {
+        const columns = {
+            'siteId': 1,
+            'projectNumber': 2,
+            'siteName': 3,
+            'status': 4,
+            'customer': 5,
+            'startDate': 6,
+            'endDate': 7
+        };
+        return columns[column] || 1;
+    }
+    
+    // Filter functionality
+    const regionFilter = document.getElementById('region-filter');
+    const statusFilter = document.getElementById('status-filter');
+    const customerFilter = document.getElementById('customer-filter');
+    const clearFiltersButton = document.getElementById('clear-filters');
+    const projectTableBody = document.getElementById('projectTableBody');
+    const projectCards = document.getElementById('projectCards');
+    
+    // Check if any filters are applied
+    function checkFiltersApplied() {
+        const isFiltered = 
+            regionFilter.value !== '' || 
+            statusFilter.value !== '' || 
+            customerFilter.value !== '';
+        
+        if (isFiltered) {
+            clearFiltersButton.classList.remove('disabled');
+        } else {
+            clearFiltersButton.classList.add('disabled');
+        }
+        
+        return isFiltered;
+    }
+    
+    // Apply filters to projects
+    function applyFilters() {
+        const regionValue = regionFilter.value;
+        const statusValue = statusFilter.value;
+        const customerValue = customerFilter.value;
+        
+        // Check if any filters are applied
+        const isFiltered = checkFiltersApplied();
+        
+        // Get all table rows
+        const tableRows = projectTableBody.querySelectorAll('tr');
+        
+        // Get all cards
+        const cards = projectCards.querySelectorAll('.project-card');
+        
+        // Filter table rows
+        tableRows.forEach(row => {
+            const region = row.getAttribute('data-region');
+            const status = row.getAttribute('data-status');
+            const customer = row.getAttribute('data-customer');
+            
+            const matchesRegion = regionValue === '' || region === regionValue;
+            const matchesStatus = statusValue === '' || status === statusValue;
+            const matchesCustomer = customerValue === '' || customer === customerValue;
+            
+            if (matchesRegion && matchesStatus && matchesCustomer) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+        
+        // Filter cards
+        cards.forEach(card => {
+            const region = card.getAttribute('data-region');
+            const status = card.getAttribute('data-status');
+            const customer = card.getAttribute('data-customer');
+            
+            const matchesRegion = regionValue === '' || region === regionValue;
+            const matchesStatus = statusValue === '' || status === statusValue;
+            const matchesCustomer = customerValue === '' || customer === customerValue;
+            
+            if (matchesRegion && matchesStatus && matchesCustomer) {
+                card.style.display = '';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+        
+        // Update counts
+        updateVisibleCounts();
+    }
+    
+    // Update visible counts
+    function updateVisibleCounts() {
+        const visibleRows = Array.from(projectTableBody.querySelectorAll('tr')).filter(row => row.style.display !== 'none');
+        const visibleCards = Array.from(projectCards.querySelectorAll('.project-card')).filter(card => card.style.display !== 'none');
+        
+        // Update table count
+        const tableCount = document.querySelector('.table-view .count');
+        if (tableCount) {
+            tableCount.textContent = `Showing ${visibleRows.length} projects`;
+        }
+        
+        // Update card count
+        const cardCount = document.querySelector('.card-view .count');
+        if (cardCount) {
+            cardCount.textContent = `Showing ${visibleCards.length} projects`;
+        }
+    }
+    
+    // Add event listeners to filters
+    regionFilter.addEventListener('change', applyFilters);
+    statusFilter.addEventListener('change', applyFilters);
+    customerFilter.addEventListener('change', applyFilters);
+    
+    // Clear filters
+    clearFiltersButton.addEventListener('click', function() {
+        // Only clear if there are filters applied
+        if (!checkFiltersApplied()) {
+            return;
+        }
+        
+        regionFilter.value = '';
+        statusFilter.value = '';
+        customerFilter.value = '';
+        
+        // Apply filters (which will now show all projects)
+        applyFilters();
+        
+        // Update button state
+        checkFiltersApplied();
+    });
+    
+    // Initial check for filter state
+    checkFiltersApplied();
+    
+    // Filter functionality
+    const filterSelect = document.getElementById('filter-select');
+    if (filterSelect) {
+        filterSelect.addEventListener('change', function(e) {
+            const region = e.target.value;
+            fetchProjects(region);
+        });
+    }
+    
+    // Pagination functionality
+    const rowsPerPage = 10;
+    let currentPage = 1;
+    
+    function setupPagination() {
+        const tableRows = document.querySelectorAll('#projectTableBody tr');
+        const totalPages = Math.ceil(tableRows.length / rowsPerPage);
+        
+        // Generate page numbers
+        const pageNumbers = document.getElementById('pageNumbers');
+        if (pageNumbers) {
+            pageNumbers.innerHTML = '';
+            
+            for (let i = 1; i <= totalPages; i++) {
+                const pageNumber = document.createElement('button');
+                pageNumber.className = `page-number ${i === currentPage ? 'active' : ''}`;
+                pageNumber.textContent = i;
+                pageNumber.addEventListener('click', function() {
+                    goToPage(i);
+                });
+                pageNumbers.appendChild(pageNumber);
+            }
+        }
+        
+        // Setup prev/next buttons
+        const prevPageBtn = document.getElementById('prevPage');
+        const nextPageBtn = document.getElementById('nextPage');
+        
+        if (prevPageBtn) {
+            prevPageBtn.disabled = currentPage === 1;
+            prevPageBtn.addEventListener('click', function() {
+                if (currentPage > 1) {
+                    goToPage(currentPage - 1);
+                }
+            });
+        }
+        
+        if (nextPageBtn) {
+            nextPageBtn.disabled = currentPage === totalPages;
+            nextPageBtn.addEventListener('click', function() {
+                if (currentPage < totalPages) {
+                    goToPage(currentPage + 1);
+                }
+            });
+        }
+        
+        // Show current page
+        showCurrentPage();
+    }
+    
+    function goToPage(page) {
+        currentPage = page;
+        showCurrentPage();
+        
+        // Update active page number
+        const pageNumbers = document.querySelectorAll('.page-number');
+        pageNumbers.forEach(btn => {
+            btn.classList.toggle('active', parseInt(btn.textContent) === page);
+        });
+        
+        // Update prev/next buttons
+        const prevPageBtn = document.getElementById('prevPage');
+        const nextPageBtn = document.getElementById('nextPage');
+        const totalPages = Math.ceil(document.querySelectorAll('#projectTableBody tr').length / rowsPerPage);
+        
+        if (prevPageBtn) prevPageBtn.disabled = page === 1;
+        if (nextPageBtn) nextPageBtn.disabled = page === totalPages;
+    }
+    
+    function showCurrentPage() {
+        const tableRows = Array.from(document.querySelectorAll('#projectTableBody tr'));
+        const startIndex = (currentPage - 1) * rowsPerPage;
+        const endIndex = startIndex + rowsPerPage;
+        
+        tableRows.forEach((row, index) => {
+            row.style.display = (index >= startIndex && index < endIndex) ? '' : 'none';
+        });
+    }
+    
+    // Initialize pagination
+    setupPagination();
+    
+    // Add tooltips to metrics
+    const metrics = document.querySelectorAll('.metric');
+    
+    metrics.forEach(metric => {
+        metric.addEventListener('click', function() {
+            const metricId = this.id;
+            showMetricDetails(metricId);
+        });
+    });
+    
+    // Generate card view from table data
+    function generateCardView() {
+        const tableRows = document.querySelectorAll('#projectTableBody tr');
+        const cardsGrid = document.getElementById('projectCardsGrid');
+        
+        if (!cardsGrid) return;
+        
+        cardsGrid.innerHTML = '';
+        
+        tableRows.forEach(row => {
+            const siteId = row.querySelector('td:nth-child(1)').textContent;
+            const projectNumber = row.querySelector('td:nth-child(2)').textContent;
+            const siteName = row.querySelector('td:nth-child(3)').textContent;
+            const status = row.querySelector('td:nth-child(4) .status-badge').textContent;
+            const statusClass = row.querySelector('td:nth-child(4) .status-badge').className.split(' ')[1] || '';
+            const customer = row.querySelector('td:nth-child(5)').textContent;
+            const startDate = row.querySelector('td:nth-child(6)').textContent;
+            const endDate = row.querySelector('td:nth-child(7)').textContent;
+            const region = row.getAttribute('data-region') || '';
+            
+            // Create card element
+            const card = document.createElement('div');
+            card.className = 'project-card';
+            card.setAttribute('data-region', region);
+            card.setAttribute('data-status', status.toLowerCase().replace(' ', '-'));
+            
+            // Calculate random progress for demo
+            const progress = Math.floor(Math.random() * 100);
+            
+            card.innerHTML = `
+                <div class="card-header">
+                    <h3>${siteName}</h3>
+                    <div class="card-status">
+                        <span class="status-badge ${statusClass}">${status}</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="card-info-row">
+                        <div class="card-info-label">Site ID:</div>
+                        <div class="card-info-value">${siteId}</div>
+                    </div>
+                    <div class="card-info-row">
+                        <div class="card-info-label">Project #:</div>
+                        <div class="card-info-value">${projectNumber}</div>
+                    </div>
+                    <div class="card-info-row">
+                        <div class="card-info-label">Customer:</div>
+                        <div class="card-info-value customer-value">${customer}</div>
+                    </div>
+                    <div class="card-info-row">
+                        <div class="card-info-label">Start Date:</div>
+                        <div class="card-info-value">${startDate}</div>
+                    </div>
+                    <div class="card-info-row">
+                        <div class="card-info-label">End Date:</div>
+                        <div class="card-info-value">${endDate}</div>
+                    </div>
+                    <div class="card-progress">
+                        <div class="progress-label">
+                            <span>Progress</span>
+                            <span>${progress}%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${progress}%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn view-btn" data-id="${siteId}">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="action-btn edit-btn" data-id="${siteId}">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="action-btn delete-btn" data-id="${siteId}">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `;
+            
+            cardsGrid.appendChild(card);
+            
+            // Add event listeners to card buttons
+            const viewBtn = card.querySelector('.view-btn');
+            const editBtn = card.querySelector('.edit-btn');
+            const deleteBtn = card.querySelector('.delete-btn');
+            
+            viewBtn.addEventListener('click', function() {
+                showProjectDetail(siteId);
+            });
+            
+            editBtn.addEventListener('click', function() {
+                editProject(siteId);
+            });
+            
+            deleteBtn.addEventListener('click', function() {
+                if (confirm(`Are you sure you want to delete site ${siteId}?`)) {
+                    card.remove();
+                    // In a real application, you would send a delete request to the server
+                }
+            });
+        });
+    }
+    
+    // Initialize card view
+    generateCardView();
+    
+    // Apply initial filters
+    applyFilters();
 });

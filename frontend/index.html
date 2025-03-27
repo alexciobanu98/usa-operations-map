@@ -18,31 +18,68 @@
                 </div>
                 <div class="nav-buttons">
                     <a href="index.html" class="nav-button active">
-                        <i class="fas fa-map"></i>
-                        Map View
+                        <i class="fas fa-map-marked-alt"></i> Map View
                     </a>
                     <a href="project-tracking.html" class="nav-button">
-                        <i class="fas fa-tasks"></i>
-                        Project Tracking
+                        <i class="fas fa-tasks"></i> Project Tracking
                     </a>
-                    <a href="#" class="nav-button">
-                        <i class="fas fa-chart-line"></i>
-                        Analytics
+                    <a href="dashboard.html" class="nav-button">
+                        <i class="fas fa-chart-line"></i> Dashboard
                     </a>
-                    <a href="#" class="nav-button">
-                        <i class="fas fa-file-alt"></i>
-                        Reports
+                    <a href="collaboration.html" class="nav-button">
+                        <i class="fas fa-users"></i> Collaboration
                     </a>
                 </div>
             </div>
             <div class="nav-right">
                 <div class="search-bar">
-                    <i class="fas fa-search search-icon"></i>
                     <input type="text" placeholder="Search projects, regions..." class="search-input">
+                    <i class="fas fa-search search-icon"></i>
                 </div>
                 <div class="notification-bell">
                     <i class="fas fa-bell"></i>
                     <span class="notification-badge">3</span>
+                    <div class="notification-dropdown">
+                        <div class="notification-header">
+                            <h3>Notifications</h3>
+                            <button class="mark-all-read">Mark all as read</button>
+                        </div>
+                        <div class="notification-list">
+                            <div class="notification-item unread">
+                                <div class="notification-icon info">
+                                    <i class="fas fa-info-circle"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <div class="notification-title">New site added</div>
+                                    <div class="notification-message">Site "Chicago Tower Beta" has been added to the Midwest region.</div>
+                                    <div class="notification-time">10 minutes ago</div>
+                                </div>
+                            </div>
+                            <div class="notification-item unread">
+                                <div class="notification-icon warning">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <div class="notification-title">Permit expiring soon</div>
+                                    <div class="notification-message">Construction permit for "Seattle Tower Alpha" expires in 7 days.</div>
+                                    <div class="notification-time">2 hours ago</div>
+                                </div>
+                            </div>
+                            <div class="notification-item unread">
+                                <div class="notification-icon success">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <div class="notification-title">Milestone completed</div>
+                                    <div class="notification-message">Foundation work for "Dallas Site Gamma" has been completed.</div>
+                                    <div class="notification-time">Yesterday</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="notification-footer">
+                            <a href="#" class="view-all-notifications">View all notifications</a>
+                        </div>
+                    </div>
                 </div>
                 <div class="profile-menu">
                     <button class="profile-button" id="profileButton">

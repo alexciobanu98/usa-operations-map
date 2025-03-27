@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Collaboration | USA Operations Map</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Top Navigation -->
+        <div class="top-nav">
+            <div class="nav-left">
+                <div class="logo-title">
+                    <img src="logo.svg" alt="Logo" class="logo">
+                    <h1>USA <span class="title-highlight">Operations</span></h1>
+                </div>
+                <div class="nav-buttons">
+                    <a href="index.html" class="nav-button">
+                        <i class="fas fa-map-marked-alt"></i> Map View
+                    </a>
+                    <a href="project-tracking.html" class="nav-button">
+                        <i class="fas fa-tasks"></i> Project Tracking
+                    </a>
+                    <a href="dashboard.html" class="nav-button">
+                        <i class="fas fa-chart-line"></i> Dashboard
+                    </a>
+                    <a href="collaboration.html" class="nav-button active">
+                        <i class="fas fa-users"></i> Collaboration
+                    </a>
+                </div>
+            </div>
+            <div class="nav-right">
+                <div class="search-bar">
+                    <input type="text" class="search-input" placeholder="Search...">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+                <div class="notification-bell" id="notificationBell">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge" id="notificationBadge">3</span>
+                    <!-- Notification Dropdown -->
+                    <div class="notification-dropdown" id="notificationDropdown">
+                        <div class="notification-header">
+                            <h3>Notifications</h3>
+                            <button class="mark-all-read" id="markAllRead">Mark all as read</button>
+                        </div>
+                        <div class="notification-body">
+                            <div class="notification-item unread">
+                                <div class="notification-icon">
+                                    <i class="fas fa-comment"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <p class="notification-text"><strong>New Comment:</strong> John Doe commented on Chicago Tower Upgrade.</p>
+                                    <p class="notification-time">5 minutes ago</p>
+                                </div>
+                                <button class="notification-action">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                            </div>
+                            <div class="notification-item unread">
+                                <div class="notification-icon">
+                                    <i class="fas fa-user-plus"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <p class="notification-text"><strong>Team Update:</strong> You've been added to Seattle Tower Installation.</p>
+                                    <p class="notification-time">1 hour ago</p>
+                                </div>
+                                <button class="notification-action">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                            </div>
+                            <div class="notification-item unread">
+                                <div class="notification-icon">
+                                    <i class="fas fa-file-alt"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <p class="notification-text"><strong>Document Shared:</strong> Site survey report for Phoenix Tower.</p>
+                                    <p class="notification-time">Yesterday</p>
+                                </div>
+                                <button class="notification-action">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="notification-footer">
+                            <a href="notifications.html" class="view-all-link">View all notifications</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-menu">
+                    <button class="profile-button" id="profileButton">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Profile" class="profile-avatar">
+                        <span class="profile-name">John Doe</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <a href="profile.html" class="profile-dropdown-item">
+                            <i class="fas fa-user"></i> My Profile
+                        </a>
+                        <a href="account-settings.html" class="profile-dropdown-item">
+                            <i class="fas fa-cog"></i> Account Settings
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="login.html" class="profile-dropdown-item text-danger">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Collaboration Content -->
+        <div class="collaboration-container">
+            <div class="collaboration-sidebar">
+                <div class="sidebar-section">
+                    <h3>My Teams</h3>
+                    <ul class="team-list">
+                        <li class="team-item active">
+                            <span class="team-icon"><i class="fas fa-users"></i></span>
+                            <span class="team-name">Tower Installation Team</span>
+                            <span class="team-badge">5</span>
+                        </li>
+                        <li class="team-item">
+                            <span class="team-icon"><i class="fas fa-users"></i></span>
+                            <span class="team-name">Site Survey Group</span>
+                            <span class="team-badge">3</span>
+                        </li>
+                        <li class="team-item">
+                            <span class="team-icon"><i class="fas fa-users"></i></span>
+                            <span class="team-name">Project Managers</span>
+                            <span class="team-badge">7</span>
+                        </li>
+                        <li class="team-item">
+                            <span class="team-icon"><i class="fas fa-users"></i></span>
+                            <span class="team-name">Engineering Team</span>
+                            <span class="team-badge">4</span>
+                        </li>
+                    </ul>
+                    <button class="sidebar-button" id="createTeamBtn">
+                        <i class="fas fa-plus"></i> Create New Team
+                    </button>
+                </div>
+                <div class="sidebar-section">
+                    <h3>Active Projects</h3>
+                    <ul class="project-list">
+                        <li class="project-item active">
+                            <span class="project-icon"><i class="fas fa-project-diagram"></i></span>
+                            <span class="project-name">Chicago Tower Upgrade</span>
+                        </li>
+                        <li class="project-item">
+                            <span class="project-icon"><i class="fas fa-project-diagram"></i></span>
+                            <span class="project-name">Seattle Tower Installation</span>
+                        </li>
+                        <li class="project-item">
+                            <span class="project-icon"><i class="fas fa-project-diagram"></i></span>
+                            <span class="project-name">Phoenix Tower Installation</span>
+                        </li>
+                        <li class="project-item">
+                            <span class="project-icon"><i class="fas fa-project-diagram"></i></span>
+                            <span class="project-name">Miami Site Survey</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="sidebar-section">
+                    <h3>Team Members</h3>
+                    <div class="member-search">
+                        <input type="text" placeholder="Search members..." id="memberSearch">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <ul class="member-list">
+                        <li class="member-item online">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="John Doe" class="member-avatar">
+                            <div class="member-info">
+                                <span class="member-name">John Doe</span>
+                                <span class="member-role">Project Manager</span>
+                            </div>
+                            <span class="member-status"></span>
+                        </li>
+                        <li class="member-item online">
+                            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Jane Smith" class="member-avatar">
+                            <div class="member-info">
+                                <span class="member-name">Jane Smith</span>
+                                <span class="member-role">Engineer</span>
+                            </div>
+                            <span class="member-status"></span>
+                        </li>
+                        <li class="member-item away">
+                            <img src="https://randomuser.me/api/portraits/men/68.jpg" alt="Mike Johnson" class="member-avatar">
+                            <div class="member-info">
+                                <span class="member-name">Mike Johnson</span>
+                                <span class="member-role">Technician</span>
+                            </div>
+                            <span class="member-status"></span>
+                        </li>
+                        <li class="member-item offline">
+                            <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Sarah Williams" class="member-avatar">
+                            <div class="member-info">
+                                <span class="member-name">Sarah Williams</span>
+                                <span class="member-role">Site Surveyor</span>
+                            </div>
+                            <span class="member-status"></span>
+                        </li>
+                        <li class="member-item online">
+                            <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Robert Brown" class="member-avatar">
+                            <div class="member-info">
+                                <span class="member-name">Robert Brown</span>
+                                <span class="member-role">Engineer</span>
+                            </div>
+                            <span class="member-status"></span>
+                        </li>
+                    </ul>
+                    <button class="sidebar-button" id="inviteMemberBtn">
+                        <i class="fas fa-user-plus"></i> Invite Member
+                    </button>
+                </div>
+            </div>
+            <div class="collaboration-main">
+                <div class="collaboration-header">
+                    <div class="header-info">
+                        <h2>Tower Installation Team</h2>
+                        <p>5 members · Chicago Tower Upgrade</p>
+                    </div>
+                    <div class="header-actions">
+                        <button class="action-button" id="videoCallBtn">
+                            <i class="fas fa-video"></i> Video Call
+                        </button>
+                        <button class="action-button" id="shareScreenBtn">
+                            <i class="fas fa-desktop"></i> Share Screen
+                        </button>
+                        <button class="action-button" id="shareFileBtn">
+                            <i class="fas fa-file-upload"></i> Share File
+                        </button>
+                    </div>
+                </div>
+                <div class="collaboration-content">
+                    <div class="chat-container">
+                        <div class="chat-messages" id="chatMessages">
+                            <div class="message-date-divider">
+                                <span>Today</span>
+                            </div>
+                            <div class="chat-message">
+                                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="John Doe" class="message-avatar">
+                                <div class="message-content">
+                                    <div class="message-header">
+                                        <span class="message-sender">John Doe</span>
+                                        <span class="message-time">9:30 AM</span>
+                                    </div>
+                                    <div class="message-body">
+                                        <p>Good morning team! Let's discuss the Chicago Tower Upgrade project today.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chat-message">
+                                <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Jane Smith" class="message-avatar">
+                                <div class="message-content">
+                                    <div class="message-header">
+                                        <span class="message-sender">Jane Smith</span>
+                                        <span class="message-time">9:32 AM</span>
+                                    </div>
+                                    <div class="message-body">
+                                        <p>I've reviewed the site survey report and have some concerns about the structural integrity of the existing tower.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chat-message file-message">
+                                <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Jane Smith" class="message-avatar">
+                                <div class="message-content">
+                                    <div class="message-header">
+                                        <span class="message-sender">Jane Smith</span>
+                                        <span class="message-time">9:33 AM</span>
+                                    </div>
+                                    <div class="message-body">
+                                        <div class="file-attachment">
+                                            <i class="fas fa-file-pdf"></i>
+                                            <div class="file-info">
+                                                <span class="file-name">Chicago_Tower_Survey_Report.pdf</span>
+                                                <span class="file-size">2.4 MB</span>
+                                            </div>
+                                            <button class="file-download">
+                                                <i class="fas fa-download"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chat-message">
+                                <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Robert Brown" class="message-avatar">
+                                <div class="message-content">
+                                    <div class="message-header">
+                                        <span class="message-sender">Robert Brown</span>
+                                        <span class="message-time">9:40 AM</span>
+                                    </div>
+                                    <div class="message-body">
+                                        <p>I agree with Jane. We might need to reinforce the structure before proceeding with the upgrade.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chat-message">
+                                <img src="https://randomuser.me/api/portraits/men/68.jpg" alt="Mike Johnson" class="message-avatar">
+                                <div class="message-content">
+                                    <div class="message-header">
+                                        <span class="message-sender">Mike Johnson</span>
+                                        <span class="message-time">9:45 AM</span>
+                                    </div>
+                                    <div class="message-body">
+                                        <p>I've worked on similar towers before. Let me check our inventory to see if we have the necessary reinforcement materials.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chat-message">
+                                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="John Doe" class="message-avatar">
+                                <div class="message-content">
+                                    <div class="message-header">
+                                        <span class="message-sender">John Doe</span>
+                                        <span class="message-time">9:50 AM</span>
+                                    </div>
+                                    <div class="message-body">
+                                        <p>Great, Mike. Please let us know what you find. We might need to adjust our budget and timeline if reinforcement is needed.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="message-date-divider">
+                                <span>Just now</span>
+                            </div>
+                            <div class="chat-message">
+                                <img src="https://randomuser.me/api/portraits/men/68.jpg" alt="Mike Johnson" class="message-avatar">
+                                <div class="message-content">
+                                    <div class="message-header">
+                                        <span class="message-sender">Mike Johnson</span>
+                                        <span class="message-time">Just now</span>
+                                    </div>
+                                    <div class="message-body">
+                                        <p>I checked our inventory. We have some reinforcement materials, but we'll need to order more. I'll prepare a list of what we need.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chat-input">
+                            <button class="input-action">
+                                <i class="fas fa-paperclip"></i>
+                            </button>
+                            <input type="text" placeholder="Type your message..." id="messageInput">
+                            <button class="input-action">
+                                <i class="fas fa-smile"></i>
+                            </button>
+                            <button class="send-button" id="sendMessageBtn">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="collaboration-sidebar-right">
+                        <div class="sidebar-section">
+                            <h3>Shared Files</h3>
+                            <ul class="file-list">
+                                <li class="file-item">
+                                    <i class="fas fa-file-pdf"></i>
+                                    <div class="file-info">
+                                        <span class="file-name">Chicago_Tower_Survey_Report.pdf</span>
+                                        <span class="file-meta">Shared by Jane Smith · 9:33 AM</span>
+                                    </div>
+                                    <button class="file-action">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                </li>
+                                <li class="file-item">
+                                    <i class="fas fa-file-excel"></i>
+                                    <div class="file-info">
+                                        <span class="file-name">Budget_Breakdown_Q2.xlsx</span>
+                                        <span class="file-meta">Shared by John Doe · Yesterday</span>
+                                    </div>
+                                    <button class="file-action">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                </li>
+                                <li class="file-item">
+                                    <i class="fas fa-file-image"></i>
+                                    <div class="file-info">
+                                        <span class="file-name">Tower_Diagram.png</span>
+                                        <span class="file-meta">Shared by Robert Brown · Yesterday</span>
+                                    </div>
+                                    <button class="file-action">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                </li>
+                                <li class="file-item">
+                                    <i class="fas fa-file-word"></i>
+                                    <div class="file-info">
+                                        <span class="file-name">Project_Specifications.docx</span>
+                                        <span class="file-meta">Shared by John Doe · Mar 26</span>
+                                    </div>
+                                    <button class="file-action">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="sidebar-section">
+                            <h3>Tasks</h3>
+                            <ul class="task-list">
+                                <li class="task-item">
+                                    <div class="task-checkbox">
+                                        <input type="checkbox" id="task1">
+                                        <label for="task1"></label>
+                                    </div>
+                                    <div class="task-info">
+                                        <span class="task-name">Review site survey report</span>
+                                        <span class="task-meta">Due: Today · Assigned to: Jane Smith</span>
+                                    </div>
+                                </li>
+                                <li class="task-item">
+                                    <div class="task-checkbox">
+                                        <input type="checkbox" id="task2">
+                                        <label for="task2"></label>
+                                    </div>
+                                    <div class="task-info">
+                                        <span class="task-name">Check inventory for reinforcement materials</span>
+                                        <span class="task-meta">Due: Today · Assigned to: Mike Johnson</span>
+                                    </div>
+                                </li>
+                                <li class="task-item completed">
+                                    <div class="task-checkbox">
+                                        <input type="checkbox" id="task3" checked>
+                                        <label for="task3"></label>
+                                    </div>
+                                    <div class="task-info">
+                                        <span class="task-name">Schedule team meeting</span>
+                                        <span class="task-meta">Due: Yesterday · Assigned to: John Doe</span>
+                                    </div>
+                                </li>
+                                <li class="task-item">
+                                    <div class="task-checkbox">
+                                        <input type="checkbox" id="task4">
+                                        <label for="task4"></label>
+                                    </div>
+                                    <div class="task-info">
+                                        <span class="task-name">Update project timeline</span>
+                                        <span class="task-meta">Due: Tomorrow · Assigned to: John Doe</span>
+                                    </div>
+                                </li>
+                            </ul>
+                            <button class="sidebar-button" id="addTaskBtn">
+                                <i class="fas fa-plus"></i> Add Task
+                            </button>
+                        </div>
+                        <div class="sidebar-section">
+                            <h3>Notes</h3>
+                            <div class="notes-container">
+                                <div class="note-item">
+                                    <h4>Meeting Notes - March 27, 2025</h4>
+                                    <p>1. Discussed structural integrity concerns</p>
+                                    <p>2. Need to order additional reinforcement materials</p>
+                                    <p>3. Budget adjustment may be required</p>
+                                    <p>4. Timeline might need extension</p>
+                                </div>
+                            </div>
+                            <button class="sidebar-button" id="addNoteBtn">
+                                <i class="fas fa-plus"></i> Add Note
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Create Team Modal -->
+        <div id="createTeamModal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Create New Team</h2>
+                    <button class="close-button" id="closeTeamModal">×</button>
+                </div>
+                <div class="modal-body">
+                    <form id="createTeamForm">
+                        <div class="form-group">
+                            <label for="teamName">Team Name</label>
+                            <input type="text" id="teamName" name="teamName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="teamDescription">Description</label>
+                            <textarea id="teamDescription" name="teamDescription" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Team Members</label>
+                            <div class="member-selection">
+                                <div class="selected-members" id="selectedMembers">
+                                    <!-- Selected members will be added here -->
+                                </div>
+                                <div class="member-search">
+                                    <input type="text" placeholder="Search members to add..." id="teamMemberSearch">
+                                </div>
+                                <div class="member-results">
+                                    <div class="member-option">
+                                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Jane Smith" class="member-avatar">
+                                        <span class="member-name">Jane Smith</span>
+                                        <button class="add-member-btn" data-id="jane-smith">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                    <div class="member-option">
+                                        <img src="https://randomuser.me/api/portraits/men/68.jpg" alt="Mike Johnson" class="member-avatar">
+                                        <span class="member-name">Mike Johnson</span>
+                                        <button class="add-member-btn" data-id="mike-johnson">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                    <div class="member-option">
+                                        <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Sarah Williams" class="member-avatar">
+                                        <span class="member-name">Sarah Williams</span>
+                                        <button class="add-member-btn" data-id="sarah-williams">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                    <div class="member-option">
+                                        <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Robert Brown" class="member-avatar">
+                                        <span class="member-name">Robert Brown</span>
+                                        <button class="add-member-btn" data-id="robert-brown">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="secondary-button" id="cancelTeamForm">Cancel</button>
+                            <button type="submit" class="primary-button">Create Team</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Task Modal -->
+        <div id="addTaskModal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Add New Task</h2>
+                    <button class="close-button" id="closeTaskModal">×</button>
+                </div>
+                <div class="modal-body">
+                    <form id="addTaskForm">
+                        <div class="form-group">
+                            <label for="taskName">Task Name</label>
+                            <input type="text" id="taskName" name="taskName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="taskDescription">Description</label>
+                            <textarea id="taskDescription" name="taskDescription" rows="3"></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="taskAssignee">Assignee</label>
+                                <select id="taskAssignee" name="taskAssignee" required>
+                                    <option value="">Select Assignee</option>
+                                    <option value="john-doe">John Doe</option>
+                                    <option value="jane-smith">Jane Smith</option>
+                                    <option value="mike-johnson">Mike Johnson</option>
+                                    <option value="sarah-williams">Sarah Williams</option>
+                                    <option value="robert-brown">Robert Brown</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="taskDueDate">Due Date</label>
+                                <input type="date" id="taskDueDate" name="taskDueDate" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="taskPriority">Priority</label>
+                            <select id="taskPriority" name="taskPriority">
+                                <option value="low">Low</option>
+                                <option value="medium" selected>Medium</option>
+                                <option value="high">High</option>
+                            </select>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="secondary-button" id="cancelTaskForm">Cancel</button>
+                            <button type="submit" class="primary-button">Add Task</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script src="collaboration.js"></script>
+</body>
+</html>
