@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Settings - Utilities One Wireless</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo-title">
+                <img src="assets/logo.png" alt="Utilities One Wireless Logo" class="logo">
+                <div class="title-container">
+                    <h1>Project Management Platform</h1>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <a href="index.html" class="nav-button">
+                    <i class="fas fa-map"></i>
+                    Map View
+                </a>
+                <a href="project-tracking.html" class="nav-button">
+                    <i class="fas fa-tasks"></i>
+                    Project Tracking
+                </a>
+            </div>
+            <div class="profile-menu">
+                <a href="profile.html" class="profile-button active">
+                    <img src="assets/default-avatar.png" alt="Profile" class="profile-avatar">
+                    <span class="profile-name">John Doe</span>
+                    <i class="fas fa-cog"></i>
+                </a>
+            </div>
+        </header>
+
+        <div class="content-container">
+            <div class="profile-settings">
+                <div class="profile-header">
+                    <h2>Profile Settings</h2>
+                    <p>Manage your account settings and preferences</p>
+                </div>
+
+                <div class="profile-sections">
+                    <div class="profile-section">
+                        <h3>Personal Information</h3>
+                        <form class="profile-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="firstName">First Name</label>
+                                    <input type="text" id="firstName" value="John">
+                                </div>
+                                <div class="form-group">
+                                    <label for="lastName">Last Name</label>
+                                    <input type="text" id="lastName" value="Doe">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" value="john.doe@utilitiesonewireless.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input type="tel" id="phone" value="+1 (555) 123-4567">
+                            </div>
+                            <div class="form-group">
+                                <label for="role">Role</label>
+                                <input type="text" id="role" value="Project Manager" readonly>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="profile-section">
+                        <h3>Change Password</h3>
+                        <form class="profile-form">
+                            <div class="form-group">
+                                <label for="currentPassword">Current Password</label>
+                                <input type="password" id="currentPassword">
+                            </div>
+                            <div class="form-group">
+                                <label for="newPassword">New Password</label>
+                                <input type="password" id="newPassword">
+                            </div>
+                            <div class="form-group">
+                                <label for="confirmPassword">Confirm New Password</label>
+                                <input type="password" id="confirmPassword">
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="profile-section">
+                        <h3>Preferences</h3>
+                        <form class="profile-form">
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" checked>
+                                    Email notifications for project updates
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" checked>
+                                    SMS notifications for urgent matters
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label for="timezone">Timezone</label>
+                                <select id="timezone">
+                                    <option value="ET">Eastern Time (ET)</option>
+                                    <option value="CT">Central Time (CT)</option>
+                                    <option value="MT">Mountain Time (MT)</option>
+                                    <option value="PT">Pacific Time (PT)</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="profile-actions">
+                    <button class="secondary-button">Cancel</button>
+                    <button class="primary-button">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="profile.js"></script>
+</body>
+</html>

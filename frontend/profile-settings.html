@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Settings - Wireless Construction Management</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Top Navigation Bar -->
+        <nav class="top-nav">
+            <div class="nav-left">
+                <div class="logo-title">
+                    <img src="assets/logo.png" alt="Utilities One Logo" class="logo">
+                    <h1>Profile Settings</h1>
+                </div>
+                <button onclick="goBack()" class="back-button">
+                    <i class="fas fa-arrow-left"></i>
+                    Back
+                </button>
+            </div>
+        </nav>
+
+        <!-- Profile Settings Content -->
+        <div class="settings-container">
+            <div class="profile-card">
+                <div class="profile-header">
+                    <img src="assets/default-avatar.png" alt="Profile" class="large-avatar">
+                    <div class="profile-info">
+                        <h2>John Doe</h2>
+                        <p>Project Manager</p>
+                    </div>
+                </div>
+                <div class="profile-form">
+                    <div class="form-section">
+                        <h3>Personal Information</h3>
+                        <div class="form-row">
+                            <label for="fullName">Full Name</label>
+                            <input type="text" id="fullName" value="John Doe">
+                        </div>
+                        <div class="form-row">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" value="john.doe@example.com">
+                        </div>
+                        <div class="form-row">
+                            <label for="phone">Phone</label>
+                            <input type="tel" id="phone" value="(555) 123-4567">
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Job Information</h3>
+                        <div class="form-row">
+                            <label for="role">Role</label>
+                            <input type="text" id="role" value="Project Manager" readonly>
+                        </div>
+                        <div class="form-row">
+                            <label for="department">Department</label>
+                            <input type="text" id="department" value="Construction Management" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Password</h3>
+                        <div class="form-row">
+                            <label for="currentPassword">Current Password</label>
+                            <input type="password" id="currentPassword">
+                        </div>
+                        <div class="form-row">
+                            <label for="newPassword">New Password</label>
+                            <input type="password" id="newPassword">
+                        </div>
+                        <div class="form-row">
+                            <label for="confirmPassword">Confirm New Password</label>
+                            <input type="password" id="confirmPassword">
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button class="secondary-button">Cancel</button>
+                        <button class="primary-button">Save Changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goBack() {
+            window.close();
+        }
+    </script>
+</body>
+</html>

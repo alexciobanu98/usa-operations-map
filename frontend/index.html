@@ -5,34 +5,75 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wireless Construction Management</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <div class="logo-title">
-                <img src="logo.svg" alt="Utilities One Logo" class="logo">
-                <div class="title-container">
+        <!-- Top Navigation Bar -->
+        <nav class="top-nav">
+            <div class="nav-left">
+                <div class="logo-title">
+                    <img src="assets/logo.png" alt="Utilities One Logo" class="logo">
                     <h1>Wireless Construction Management</h1>
                 </div>
+                <div class="nav-buttons">
+                    <a href="index.html" class="nav-button active">
+                        <i class="fas fa-map"></i>
+                        Map View
+                    </a>
+                    <a href="project-tracking.html" class="nav-button">
+                        <i class="fas fa-tasks"></i>
+                        Project Tracking
+                    </a>
+                </div>
             </div>
-            <div class="nav-buttons">
-                <a href="project-tracking.html" class="nav-button">Project Tracking</a>
+            <div class="nav-right">
+                <div class="profile-menu">
+                    <button class="profile-button" id="profileButton">
+                        <img src="assets/default-avatar.png" alt="Profile" class="profile-avatar">
+                        <span class="profile-name">John Doe</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <a href="profile-settings.html" class="profile-dropdown-item" target="_blank">
+                            <i class="fas fa-user"></i>
+                            Profile Settings
+                        </a>
+                        <a href="notifications.html" class="profile-dropdown-item" target="_blank">
+                            <i class="fas fa-bell"></i>
+                            Notifications
+                        </a>
+                        <a href="account-settings.html" class="profile-dropdown-item" target="_blank">
+                            <i class="fas fa-cog"></i>
+                            Account Settings
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="login.html" class="profile-dropdown-item text-danger">
+                            <i class="fas fa-sign-out-alt"></i>
+                            Logout
+                        </a>
+                    </div>
+                </div>
             </div>
-            <div class="metrics">
-                <div class="metric">
-                    <span class="metric-label">Active Sites</span>
-                    <span class="metric-value" id="total-sites">--</span>
-                </div>
-                <div class="metric">
-                    <span class="metric-label">Equipment Available</span>
-                    <span class="metric-value" id="equipment-health">--</span>
-                </div>
-                <div class="metric">
-                    <span class="metric-label">Construction Teams</span>
-                    <span class="metric-value" id="total-teams">--</span>
-                </div>
+        </nav>
+
+        <!-- Metrics Bar -->
+        <div class="metrics-bar">
+            <div class="metric">
+                <span class="metric-label">Active Sites</span>
+                <span class="metric-value" id="total-sites">--</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Equipment Available</span>
+                <span class="metric-value" id="equipment-health">--</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Construction Teams</span>
+                <span class="metric-value" id="total-teams">--</span>
             </div>
         </div>
+
+        <!-- Map Container -->
         <div class="map-container">
             <div id="usa-map"></div>
             <div class="legend">

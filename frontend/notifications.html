@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications - Wireless Construction Management</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Top Navigation Bar -->
+        <nav class="top-nav">
+            <div class="nav-left">
+                <div class="logo-title">
+                    <img src="assets/logo.png" alt="Utilities One Logo" class="logo">
+                    <h1>Notifications</h1>
+                </div>
+                <button onclick="goBack()" class="back-button">
+                    <i class="fas fa-arrow-left"></i>
+                    Back
+                </button>
+            </div>
+        </nav>
+
+        <!-- Notifications Content -->
+        <div class="settings-container">
+            <div class="notifications-card">
+                <div class="notifications-header">
+                    <h2>Notifications</h2>
+                    <button class="secondary-button">Mark All as Read</button>
+                </div>
+
+                <div class="notifications-list">
+                    <div class="notification-item unread">
+                        <i class="fas fa-exclamation-circle notification-icon warning"></i>
+                        <div class="notification-content">
+                            <div class="notification-title">Project Update Required</div>
+                            <div class="notification-message">Project #1234 needs timeline update</div>
+                            <div class="notification-time">2 hours ago</div>
+                        </div>
+                    </div>
+
+                    <div class="notification-item unread">
+                        <i class="fas fa-check-circle notification-icon success"></i>
+                        <div class="notification-content">
+                            <div class="notification-title">Milestone Completed</div>
+                            <div class="notification-message">Foundation work completed for Site #5678</div>
+                            <div class="notification-time">5 hours ago</div>
+                        </div>
+                    </div>
+
+                    <div class="notification-item">
+                        <i class="fas fa-info-circle notification-icon info"></i>
+                        <div class="notification-content">
+                            <div class="notification-title">New Task Assignment</div>
+                            <div class="notification-message">You have been assigned to review Site #9012</div>
+                            <div class="notification-time">1 day ago</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="notifications-settings">
+                    <h3>Notification Settings</h3>
+                    <div class="settings-group">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-title">Project Updates</div>
+                                <div class="setting-description">Get notified about project status changes</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-title">Task Assignments</div>
+                                <div class="setting-description">Receive notifications for new task assignments</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-title">Milestone Alerts</div>
+                                <div class="setting-description">Get alerts for upcoming and completed milestones</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goBack() {
+            window.close();
+        }
+    </script>
+</body>
+</html>

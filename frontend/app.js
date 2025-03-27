@@ -16,6 +16,26 @@ const regions = {
         name: "Midwest",
         states: ["IL", "IN", "IA", "KS", "MI", "MN", "MO", "NE", "ND", "OH", "SD", "WI"],
         color: "#2196F3"
+    },
+    northeast: {
+        name: "Northeast",
+        states: ["CT", "DE", "ME", "MD", "MA", "NH", "NJ", "NY", "PA", "RI", "VT"],
+        color: "#2196F3"
+    },
+    southeast: {
+        name: "Southeast",
+        states: ["AL", "AR", "FL", "GA", "KY", "LA", "MS", "NC", "SC", "TN", "VA", "WV"],
+        color: "#2196F3"
+    },
+    southwest: {
+        name: "Southwest",
+        states: ["AZ", "NM", "OK", "TX"],
+        color: "#2196F3"
+    },
+    west: {
+        name: "West",
+        states: ["CA", "CO", "MT", "NV", "UT", "WY"],
+        color: "#2196F3"
     }
 };
 
@@ -89,12 +109,19 @@ function getStateAbbr(id, stateNames) {
 }
 
 function getRegionColor(stateAbbr) {
-    for (const [regionId, region] of Object.entries(regions)) {
-        if (region.states.includes(stateAbbr)) {
+    if (selectedRegion) {
+        const region = regions[selectedRegion];
+        if (region && region.states.includes(stateAbbr)) {
             return region.color;
         }
     }
-    return "#e3f2fd";
+    
+    for (const [regionId, region] of Object.entries(regions)) {
+        if (region.states.includes(stateAbbr)) {
+            return "#90caf9"; // lighter blue for non-selected regions
+        }
+    }
+    return "#e3f2fd"; // very light blue for non-region states
 }
 
 function isStateInRegions(stateAbbr) {
@@ -104,7 +131,7 @@ function isStateInRegions(stateAbbr) {
 function getRegionForState(stateAbbr) {
     for (const [regionId, region] of Object.entries(regions)) {
         if (region.states.includes(stateAbbr)) {
-            return { id: regionId, ...region };
+            return regionId;
         }
     }
     return null;
@@ -112,33 +139,27 @@ function getRegionForState(stateAbbr) {
 
 function showTooltip(event, d) {
     const stateAbbr = getStateAbbr(d.id, new Map(usData.objects.states.geometries.map(d => [d.id, d.properties.name])));
-    const region = getRegionForState(stateAbbr);
+    const regionId = getRegionForState(stateAbbr);
     
-    if (region && regionData[region.id]) {
-        const data = regionData[region.id];
+    if (regionId) {
+        const region = regions[regionId];
         const tooltip = d3.select("#tooltip");
-        
         tooltip
             .classed("hidden", false)
             .html(`
-                <strong>${data.name}</strong><br>
-                Active Sites: ${data.operations.construction.active_sites}<br>
-                Equipment Available: ${data.operations.equipment.health_status}%<br>
-                Completion Rate: ${data.operations.construction.completion_rate}
-            `);
-        
-        moveTooltip(event);
+                <strong>${region.name}</strong><br>
+                State: ${stateAbbr}<br>
+                Click for details
+            `)
+            .style("left", (event.pageX + 10) + "px")
+            .style("top", (event.pageY - 10) + "px");
     }
 }
 
 function moveTooltip(event) {
-    const tooltip = d3.select("#tooltip");
-    const tooltipWidth = tooltip.node().offsetWidth;
-    const tooltipHeight = tooltip.node().offsetHeight;
-    
-    tooltip
-        .style("left", (event.pageX - tooltipWidth / 2) + "px")
-        .style("top", (event.pageY - tooltipHeight - 10) + "px");
+    d3.select("#tooltip")
+        .style("left", (event.pageX + 10) + "px")
+        .style("top", (event.pageY - 10) + "px");
 }
 
 function hideTooltip() {
@@ -147,63 +168,83 @@ function hideTooltip() {
 
 function handleStateClick(event, d) {
     const stateAbbr = getStateAbbr(d.id, new Map(usData.objects.states.geometries.map(d => [d.id, d.properties.name])));
-    const region = getRegionForState(stateAbbr);
-    
-    if (region && regionData[region.id]) {
-        showRegionDetails(region.id);
+    const regionId = getRegionForState(stateAbbr);
+    if (regionId) {
+        showRegionDetails(regionId);
     }
 }
 
 function showRegionDetails(regionId) {
-    const data = regionData[regionId];
-    const details = d3.select("#region-details");
-    
-    details.select("#region-title").text(data.name);
-    
-    const content = details.select("#operations-content");
-    content.html(`
-        <div class="operation-card">
-            <h3>Construction</h3>
-            <p>Active Sites: ${data.operations.construction.active_sites}</p>
-            <p>Completion Rate: ${data.operations.construction.completion_rate}</p>
-            <p>Equipment Deployed: ${data.operations.construction.equipment_deployed}</p>
-            <p>Locations: ${data.operations.construction.locations.join(", ")}</p>
+    selectedRegion = regionId;
+    const region = regions[regionId];
+    const details = regionData[regionId] || {};
+
+    // Update map colors
+    statesGroup.selectAll("path")
+        .attr("fill", d => getRegionColor(getStateAbbr(d.id, new Map(usData.objects.states.geometries.map(d => [d.id, d.properties.name])))));
+
+    // Update details panel
+    document.getElementById("region-title").textContent = region.name;
+    const content = document.getElementById("operations-content");
+    content.innerHTML = `
+        <div class="operation-item">
+            <h3>Active Sites</h3>
+            <p>${details.activeSites || 0}</p>
         </div>
-        <div class="operation-card">
-            <h3>Equipment</h3>
-            <p>Inventory Status: ${data.operations.equipment.inventory_status}</p>
-            <p>Major Equipment: ${data.operations.equipment.major_equipment.join(", ")}</p>
-            <p>Equipment Available: ${data.operations.equipment.health_status}%</p>
+        <div class="operation-item">
+            <h3>Construction Teams</h3>
+            <p>${details.teams || 0}</p>
         </div>
-    `);
-    
-    details.classed("hidden", false);
+        <div class="operation-item">
+            <h3>Equipment Status</h3>
+            <p>${details.equipmentStatus || 'N/A'}</p>
+        </div>
+    `;
+
+    document.getElementById("region-details").classList.remove("hidden");
 }
 
 function closeDetails() {
-    d3.select("#region-details").classed("hidden", true);
+    selectedRegion = null;
+    document.getElementById("region-details").classList.add("hidden");
+    // Reset map colors
+    statesGroup.selectAll("path")
+        .attr("fill", d => getRegionColor(getStateAbbr(d.id, new Map(usData.objects.states.geometries.map(d => [d.id, d.properties.name])))));
 }
 
 function updateMetricsSummary() {
     let totalSites = 0;
-    let totalHealth = 0;
-    let healthCount = 0;
-    
-    Object.values(regionData).forEach(region => {
-        totalSites += region.operations.construction.active_sites;
-        const health = parseInt(region.operations.equipment.health_status);
-        if (!isNaN(health)) {
-            totalHealth += health;
-            healthCount++;
-        }
-    });
-    
-    const avgHealth = healthCount > 0 ? Math.round(totalHealth / healthCount) : 0;
-    
-    d3.select("#total-sites").text(totalSites);
-    d3.select("#equipment-health").text(avgHealth + "%");
-    d3.select("#total-teams").text("20"); // This would come from the API in a real application
+    let totalTeams = 0;
+    let equipmentHealth = "Good";
+
+    for (const [regionId, details] of Object.entries(regionData)) {
+        totalSites += details.activeSites || 0;
+        totalTeams += details.teams || 0;
+    }
+
+    document.getElementById("total-sites").textContent = totalSites;
+    document.getElementById("total-teams").textContent = totalTeams;
+    document.getElementById("equipment-health").textContent = equipmentHealth;
 }
+
+// Profile dropdown functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const profileButton = document.getElementById('profileButton');
+    const profileDropdown = document.getElementById('profileDropdown');
+
+    if (profileButton && profileDropdown) {
+        profileButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            profileDropdown.classList.toggle('show');
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!profileDropdown.contains(e.target)) {
+                profileDropdown.classList.remove('show');
+            }
+        });
+    }
+});
 
 // State abbreviations mapping
 const stateAbbreviations = {
@@ -211,11 +252,10 @@ const stateAbbreviations = {
     "Colorado": "CO", "Connecticut": "CT", "Delaware": "DE", "Florida": "FL", "Georgia": "GA",
     "Hawaii": "HI", "Idaho": "ID", "Illinois": "IL", "Indiana": "IN", "Iowa": "IA",
     "Kansas": "KS", "Kentucky": "KY", "Louisiana": "LA", "Maine": "ME", "Maryland": "MD",
-    "Massachusetts": "MA", "Michigan": "MI", "Minnesota": "MN", "Mississippi": "MS",
-    "Missouri": "MO", "Montana": "MT", "Nebraska": "NE", "Nevada": "NV", "New Hampshire": "NH",
-    "New Jersey": "NJ", "New Mexico": "NM", "New York": "NY", "North Carolina": "NC",
-    "North Dakota": "ND", "Ohio": "OH", "Oklahoma": "OK", "Oregon": "OR", "Pennsylvania": "PA",
-    "Rhode Island": "RI", "South Carolina": "SC", "South Dakota": "SD", "Tennessee": "TN",
-    "Texas": "TX", "Utah": "UT", "Vermont": "VT", "Virginia": "VA", "Washington": "WA",
-    "West Virginia": "WV", "Wisconsin": "WI", "Wyoming": "WY"
+    "Massachusetts": "MA", "Michigan": "MI", "Minnesota": "MN", "Mississippi": "MS", "Missouri": "MO",
+    "Montana": "MT", "Nebraska": "NE", "Nevada": "NV", "New Hampshire": "NH", "New Jersey": "NJ",
+    "New Mexico": "NM", "New York": "NY", "North Carolina": "NC", "North Dakota": "ND", "Ohio": "OH",
+    "Oklahoma": "OK", "Oregon": "OR", "Pennsylvania": "PA", "Rhode Island": "RI", "South Carolina": "SC",
+    "South Dakota": "SD", "Tennessee": "TN", "Texas": "TX", "Utah": "UT", "Vermont": "VT",
+    "Virginia": "VA", "Washington": "WA", "West Virginia": "WV", "Wisconsin": "WI", "Wyoming": "WY"
 };

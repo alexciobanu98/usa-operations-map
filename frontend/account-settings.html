@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Settings - Wireless Construction Management</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Top Navigation Bar -->
+        <nav class="top-nav">
+            <div class="nav-left">
+                <div class="logo-title">
+                    <img src="assets/logo.png" alt="Utilities One Logo" class="logo">
+                    <h1>Account Settings</h1>
+                </div>
+                <button onclick="goBack()" class="back-button">
+                    <i class="fas fa-arrow-left"></i>
+                    Back
+                </button>
+            </div>
+        </nav>
+
+        <!-- Account Settings Content -->
+        <div class="settings-container">
+            <div class="settings-card">
+                <div class="settings-sections">
+                    <div class="form-section">
+                        <h3>Account Preferences</h3>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-title">Language</div>
+                                <div class="setting-description">Select your preferred language</div>
+                            </div>
+                            <select class="setting-select">
+                                <option value="en">English</option>
+                                <option value="es">Spanish</option>
+                                <option value="fr">French</option>
+                            </select>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-title">Time Zone</div>
+                                <div class="setting-description">Set your local time zone</div>
+                            </div>
+                            <select class="setting-select">
+                                <option value="est">Eastern Time (ET)</option>
+                                <option value="cst">Central Time (CT)</option>
+                                <option value="mst">Mountain Time (MT)</option>
+                                <option value="pst">Pacific Time (PT)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Privacy Settings</h3>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-title">Profile Visibility</div>
+                                <div class="setting-description">Control who can see your profile information</div>
+                            </div>
+                            <select class="setting-select">
+                                <option value="public">Public</option>
+                                <option value="team">Team Only</option>
+                                <option value="private">Private</option>
+                            </select>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-title">Activity Status</div>
+                                <div class="setting-description">Show when you're active on the platform</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Email Preferences</h3>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-title">Project Updates</div>
+                                <div class="setting-description">Receive email notifications for project updates</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-title">Team Messages</div>
+                                <div class="setting-description">Get email notifications for team messages</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button class="secondary-button">Reset to Default</button>
+                        <button class="primary-button">Save Changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goBack() {
+            window.close();
+        }
+    </script>
+</body>
+</html>

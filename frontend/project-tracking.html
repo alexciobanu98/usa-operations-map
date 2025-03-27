@@ -9,17 +9,72 @@
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <div class="logo-title">
-                <img src="logo.svg" alt="Utilities One Logo" class="logo">
-                <div class="title-container">
-                    <h1>Project Tracking</h1>
+        <!-- Top Navigation Bar -->
+        <nav class="top-nav">
+            <div class="nav-left">
+                <div class="logo-title">
+                    <img src="assets/logo.png" alt="Utilities One Logo" class="logo">
+                    <h1>Wireless Construction Management</h1>
+                </div>
+                <div class="nav-buttons">
+                    <a href="index.html" class="nav-button">
+                        <i class="fas fa-map"></i>
+                        Map View
+                    </a>
+                    <a href="project-tracking.html" class="nav-button active">
+                        <i class="fas fa-tasks"></i>
+                        Project Tracking
+                    </a>
                 </div>
             </div>
-            <div class="nav-buttons">
-                <a href="index.html" class="nav-button">Map View</a>
+
+            <div class="nav-right">
+                <div class="profile-menu">
+                    <button class="profile-button" id="profileButton">
+                        <img src="assets/default-avatar.png" alt="Profile" class="profile-avatar">
+                        <span class="profile-name">John Doe</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <a href="profile-settings.html" class="profile-dropdown-item" target="_blank">
+                            <i class="fas fa-user"></i>
+                            Profile Settings
+                        </a>
+                        <a href="notifications.html" class="profile-dropdown-item" target="_blank">
+                            <i class="fas fa-bell"></i>
+                            Notifications
+                        </a>
+                        <a href="account-settings.html" class="profile-dropdown-item" target="_blank">
+                            <i class="fas fa-cog"></i>
+                            Account Settings
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="login.html" class="profile-dropdown-item text-danger">
+                            <i class="fas fa-sign-out-alt"></i>
+                            Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Metrics Bar -->
+        <div class="metrics-bar">
+            <div class="metric">
+                <span class="metric-label">Active Sites</span>
+                <span class="metric-value" id="total-sites">--</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Equipment Available</span>
+                <span class="metric-value" id="equipment-health">--</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Construction Teams</span>
+                <span class="metric-value" id="total-teams">--</span>
             </div>
         </div>
+
+        <!-- Project Grid -->
         <div class="content-container">
             <!-- Region Summary Cards -->
             <div class="region-summary">
@@ -95,7 +150,7 @@
                 </div>
             </div>
 
-            <!-- Project Detail Card (Hidden by default) -->
+            <!-- Project Detail Modal -->
             <div id="projectDetail" class="project-detail-modal hidden">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -103,7 +158,34 @@
                         <button class="close-button" onclick="closeProjectDetail()">×</button>
                     </div>
                     <div class="modal-body">
+                        <!-- Project Overview Card -->
+                        <div class="project-overview-card">
+                            <div class="card-header">
+                                <h3 id="detail-project-title">Project Title</h3>
+                                <span class="status-badge" id="detail-status-badge">Status</span>
+                            </div>
+                            <div class="card-stats">
+                                <div class="stat">
+                                    <span class="stat-label">Progress</span>
+                                    <div class="progress-bar">
+                                        <div class="progress" id="detail-progress"></div>
+                                    </div>
+                                    <span class="stat-value" id="detail-progress-value">0%</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-label">Team Size</span>
+                                    <span class="stat-value" id="detail-team-size">--</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-label">Days Left</span>
+                                    <span class="stat-value" id="detail-days-left">--</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Project Details Grid -->
                         <div class="detail-grid">
+                            <!-- Basic Information -->
                             <div class="detail-section">
                                 <h3>Basic Information</h3>
                                 <div class="detail-row">
@@ -122,7 +204,13 @@
                                     <span class="detail-label">Site Name:</span>
                                     <span class="detail-value" id="detail-siteName"></span>
                                 </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Site Address:</span>
+                                    <span class="detail-value" id="detail-siteAddress"></span>
+                                </div>
                             </div>
+
+                            <!-- Project Specifications -->
                             <div class="detail-section">
                                 <h3>Project Specifications</h3>
                                 <div class="detail-row">
@@ -137,9 +225,23 @@
                                     <span class="detail-label">Customer:</span>
                                     <span class="detail-value" id="detail-customer"></span>
                                 </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Subcontractor Crew:</span>
+                                    <span class="detail-value" id="detail-subcontractor"></span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">PO Status:</span>
+                                    <span class="detail-value" id="detail-poStatus"></span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="detail-label">Permits:</span>
+                                    <span class="detail-value" id="detail-permits"></span>
+                                </div>
                             </div>
+
+                            <!-- Timeline Information -->
                             <div class="detail-section">
-                                <h3>Timeline</h3>
+                                <h3>Timeline Information</h3>
                                 <div class="detail-row">
                                     <span class="detail-label">Forecasted Start:</span>
                                     <span class="detail-value" id="detail-forecastedStart"></span>
@@ -158,45 +260,69 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        <div class="detail-section full-width">
-                            <h3>Project Milestones</h3>
-                            <div class="milestone-timeline" id="milestone-timeline">
-                                <!-- Milestones will be populated by JavaScript -->
+
+                        <!-- Project Timeline -->
+                        <div class="project-timeline-card">
+                            <div class="section-header">
+                                <h3>Project Milestones</h3>
+                                <button class="add-button" onclick="addMilestone()">
+                                    <i class="fas fa-plus"></i> Add Milestone
+                                </button>
+                            </div>
+                            <div class="timeline" id="detail-timeline">
+                                <!-- Timeline items will be populated by JavaScript -->
                             </div>
                         </div>
 
-                        <div class="detail-section full-width">
-                            <h3>Additional Information</h3>
-                            <div class="detail-row">
-                                <span class="detail-label">Subcontractor Crew:</span>
-                                <span class="detail-value" id="detail-subcontractor"></span>
+                        <!-- Bill of Materials -->
+                        <div class="materials-section">
+                            <div class="section-header">
+                                <h3>Bill of Materials</h3>
+                                <button class="add-button" onclick="addMaterial()">
+                                    <i class="fas fa-plus"></i> Add Material
+                                </button>
                             </div>
-                            <div class="detail-row">
-                                <span class="detail-label">PO Status:</span>
-                                <span class="detail-value" id="detail-poStatus"></span>
-                            </div>
-                            <div class="detail-row">
-                                <span class="detail-label">Permits:</span>
-                                <span class="detail-value" id="detail-permits"></span>
-                            </div>
-                            <div class="detail-row">
-                                <span class="detail-label">Site Address:</span>
-                                <span class="detail-value" id="detail-address"></span>
+                            <div class="materials-table">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Item</th>
+                                            <th>Quantity</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="materials-list">
+                                        <!-- Materials will be populated by JavaScript -->
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
 
-                        <div class="detail-section full-width">
-                            <h3>Bill of Materials</h3>
-                            <div class="materials-table" id="materials-table">
-                                <!-- Materials table will be populated by JavaScript -->
+                        <!-- Task Management -->
+                        <div class="tasks-section">
+                            <div class="section-header">
+                                <h3>Tasks</h3>
+                                <button class="add-button" onclick="addTask()">
+                                    <i class="fas fa-plus"></i> Add Task
+                                </button>
                             </div>
+                            <div class="tasks-grid" id="tasks-list">
+                                <!-- Tasks will be populated by JavaScript -->
+                            </div>
+                        </div>
+
+                        <!-- Edit Buttons -->
+                        <div class="modal-footer">
+                            <button class="secondary-button" onclick="closeProjectDetail()">Close</button>
+                            <button class="primary-button" onclick="editProject()">Edit Project</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <script src="app.js"></script>
     <script src="project-tracking.js"></script>
 </body>
 </html>
